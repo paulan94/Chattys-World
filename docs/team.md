@@ -9,7 +9,7 @@ title:  Team
 ## Paul An
 ***UCI Net ID***: anpj
 
-## Anthony Gomex
+## Anthony Gomez
 ***UCI Net ID***: argomez1
 
 ## Kyle Duong
