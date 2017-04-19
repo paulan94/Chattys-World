@@ -6,9 +6,9 @@ title: Proposal
 This is our proposal page for CS 175.
 This is the 2rd line.
 
-##headers start with "##"
+## headers start with "##"
 
-##The rest of the project
+## The rest of the project
 
 2.2 Summary of the Project (30 points)
 In a paragraph or so, mention the main idea behind your project. At the very least, you should have a sentence
