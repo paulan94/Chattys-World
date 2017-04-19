@@ -6,11 +6,11 @@ title:  Team
 # {{ page.title }}
 
 
-## USER 1
-***UCI Net ID***: ucinetid
+## Paul An
+***UCI Net ID***: anpj
 
-## USER 2
-***UCI Net ID***: ucinetid
+## Anthony Gomex
+***UCI Net ID***: argomez1
 
-## USER 3
-***UCI Net ID***: ucinetid
+## Kyle Duong
+***UCI Net ID***: TO BE DETERMINED

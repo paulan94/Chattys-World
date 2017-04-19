@@ -3,7 +3,7 @@ layout: default
 title:  Home
 ---
 
-_Add your text here_
+Welcome to MinecraftBois
 
 
 What's Markdown (`.md`)?
