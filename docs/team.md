@@ -13,4 +13,4 @@ title:  Team
 ***UCI Net ID***: argomez1
 
 ## Kyle Duong
-***UCI Net ID***: TO BE DETERMINED
+***UCI Net ID***: kgduong
