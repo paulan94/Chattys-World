@@ -8,9 +8,6 @@ This is the 2rd line.
 
 ## headers start with "##"
 
-## The rest of the project
-
-In a paragraph or so, mention the main idea behind your project. At the very least, you should have a sentence that clearly explains the input/output semantics of your project, i.e. what information will it take as input, and what will it produce. Mention any applications, if any, for your project.
 
 ## 2.1 Creating a Proposal Page (15 points)
 	## CHECK
@@ -26,8 +23,12 @@ We expect to use something like the kNN nearest neighbor or some sort of cluster
 
 ## 2.4 Evaluation Plan (30 points)
 
-As described in class, mention how you will evaluate the success of your project. In a paragraph, focus on the quantitative evaluation: what are the metrics, what are the baselines, how much you expect your approach to improve the metric by, what data will you evaluate on, etc. In another paragraph, describe what qualitative analysis you will show to verify the project works, such as what are the sanity cases for the approach, how will you visualize the internals of the algorithm to verify it works, what’s your moonshot case, i.e. it’ll be awesome and impressive if you get there. Note that these are not promises, we’re not going to hold you to what you say here, but we want to see if you are able to think about evaluation of your project in a critical manner
+
+We will evaluate our success by making sure that our AI is doing what it is being asked. We expect at first our AI to be unsure of things. If given a command for the first time, it will execute what it believes to be the command and then ask if it was correct. If incorrect, we plan to use algorithms to correct it. If the command was correct, the AI will not ask for verification if the same command is issued to it. We will score our success based on our AI’s ability to adapt and understand what we feed it as input.
+
+Our project is something that we can work on for many years. We will start by adding on an initial set of actions our AI is capable of completing. We will build upon these initial actions by adding in more complex sequences of actions that require different algorithms to carry out. It would be impressive if we could have our AI interact with us and ask us for clarification when it doesn’t understand an input. It might then give a list of suggestions for what it thought we meant.
+
 
 
 ## 2.5 Appointment with the Instructor (15 points)
-	## CHECK
+	## Thursday 4/27 2:30PM
