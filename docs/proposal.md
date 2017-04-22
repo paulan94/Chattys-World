@@ -4,10 +4,6 @@ title: Proposal
 ---
 
 This is our proposal page for CS 175.
-This is the 2rd line.
-
-## headers start with "##"
-
 
 ## 2.1 Creating a Proposal Page (15 points)
 	## CHECK
