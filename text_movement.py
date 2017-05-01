@@ -118,3 +118,8 @@ def jump(agent_host):
     agent_host.sendCommand("jump 1")
     time.sleep(.5)
     agent_host.sendCommand("jump 0")
+
+def grab(agent_host, key):
+    #used to grab inventory 0-9 (hotbar)
+    agent_host.sendCommand("hotbar." + str(key) + " 1")
+    agent_host.sendCommand("hotbar." + str(key) + " 0")

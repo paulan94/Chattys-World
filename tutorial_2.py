@@ -60,6 +60,7 @@ missionXML='''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
                 </AgentStart>
                 <AgentHandlers>
                   <ContinuousMovementCommands turnSpeedDegs="180"/>
+                  <InventoryCommands/>
                 </AgentHandlers>
               </AgentSection>
             </Mission>'''
@@ -152,6 +153,9 @@ while True:
                 text_movement.turn(agent_host, -1)
             elif command[1] == "right":
                 text_movement.turn(agent_host)
+
+        if command[0] == "grab":
+            text_movement.grab(agent_host, command[1])
 
     if len(command) == 3 and command[0] == "turn":
         if command[1] == "left":
