@@ -25,6 +25,7 @@ import sys
 import time
 import random
 import json
+import math
 
 sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
 
@@ -187,42 +188,58 @@ while world_state.is_mission_running:
             if chatty != None:
                 chatty_x = chatty["x"]
                 chatty_z = chatty["z"]
-                print chatty_x, chatty_z
+                # print chatty_x, chatty_z
                 chatty_sum = chatty_x+chatty_z
                 # print pigList[0]
                 #TODO: change way to find shortest distance to pig
                 distanceList = []
                 #TODO: change this
-                for pg in pigList:
-                    pg_sum = pg["x"] + pg["z"]
-                    chatty_diff = abs(chatty_sum - pg_sum)
-                    distanceList.append(chatty_diff)
-                # print distanceList
+                for pig in pigList:
+                    pig_x = pig["x"]
+                    pig_z = pig["z"]
 
-                for pg in pigList:
-                    pg_sum = pg["x"] + pg["z"]
-                    chatty_diff = abs(chatty_sum - pg_sum)
-                    if chatty_diff == min(distanceList):
-                        print "this piggy is closest"
-                        closest_pig = pg
+                    # print "values are"
+                    # print (chatty_x, chatty_z, pig_x, pig_z)
+                    # x_distance = (abs(chatty_x - pig_x))**2
+                    # print x_distance
+                    # z_distance = (abs(chatty_z - pig_z))**2
+                    # print z_distance
+                    #distance formula to get distance from any pig to chatty
+                    distanceToChattyFromPig = math.sqrt(abs((abs(chatty_x - pig_x)**2) - (abs(chatty_z - pig_z)**2)))
+                    distanceList.append(distanceToChattyFromPig)
+
+                print distanceList
+                #Check if the pig's distance is the smallest one in distanceList, if true, set the pig to the closest.
+                for pig in pigList:
+                    pig_x = pig["x"]
+                    pig_z = pig["z"]
+                    distanceToChattyFromPig = math.sqrt(abs((abs(chatty_x - pig_x) ** 2) - (abs(chatty_z - pig_z) ** 2)))
+                    if distanceToChattyFromPig == min(distanceList):
+                        #set closest pig here.
+                        closest_pig = pig
+                        print distanceToChattyFromPig
+                        print "closest"
+                        print closest_pig
+
 
         #ObsFromRay usage here
-        if 'LineOfSight' in observation:
-            los = observation['LineOfSight']
-            print chatty
-            print closest_pig
-            #TODO:while not in range, move to closest pig
-            # print los["x"], los["z"], closest_pig["x"], closest_pig["x"]
-            #if the object in line of sight has same x and z value as closest pig, we found the right one, if its in range,
-            #kill IT!!!!
-            if (los["x"] == closest_pig["x"]) and los["z"] == closest_pig["z"]:
-                print "found the closest piggy"
-                if los["inRange"] and los["type"] == "Pig":
-                    agent_host.sendCommand("attack 1")
-                    time.sleep(0.5)
-                    agent_host.sendCommand("attack 0")
-                else:
-                    pass
+        #TODO: use the observation
+        # if 'LineOfSight' in observation:
+        #     los = observation['LineOfSight']
+        #     print chatty
+        #     print closest_pig
+        #     #TODO:while not in range, move to closest pig
+        #     # print los["x"], los["z"], closest_pig["x"], closest_pig["x"]
+        #     #if the object in line of sight has same x and z value as closest pig, we found the right one, if its in range,
+        #     #kill IT!!!!
+        #     if (los["x"] == closest_pig["x"]) and los["z"] == closest_pig["z"]:
+        #         print "found the closest piggy"
+        #         if los["inRange"] and los["type"] == "Pig":
+        #             agent_host.sendCommand("attack 1")
+        #             time.sleep(0.5)
+        #             agent_host.sendCommand("attack 0")
+        #         else:
+        #             pass
 
             #TODO: pan until we find closest pig in line of sight and until it is in range, move toward it
 
