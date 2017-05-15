@@ -174,6 +174,7 @@ while world_state.is_mission_running:
         observation = json.loads(world_state.observations[-1].text)
         chatty = None
         closest_pig = None
+        distanceToChattyFromPig = -999
         if 'Entities' in observation:
             entities = observation['Entities']
             pigList = []
@@ -217,17 +218,66 @@ while world_state.is_mission_running:
                     if distanceToChattyFromPig == min(distanceList):
                         #set closest pig here.
                         closest_pig = pig
-                        print distanceToChattyFromPig
-                        print "closest"
-                        print closest_pig
+                        #stop checking the piglist
+                        break
+                        # print distanceToChattyFromPig
+                        # print "closest"
+                        # print closest_pig
 
 
         #ObsFromRay usage here
-        #TODO: use the observation
-        # if 'LineOfSight' in observation:
-        #     los = observation['LineOfSight']
-        #     print chatty
-        #     print closest_pig
+        #TODO: use the observation to possiobly get direction object is facing
+        if 'LineOfSight' in observation:
+            los = observation['LineOfSight']
+            print chatty
+            print closest_pig
+            print distanceToChattyFromPig
+            # print los["inRange"]
+            # if the closest piggy is not in sight, use the coordinates to pitch and turn accordingly
+            while (los["x"] != closest_pig["x"]) and los["z"] != closest_pig["z"]:
+                chatty_x = chatty["x"]
+                chatty_z = chatty["z"]
+                closest_pig_x = closest_pig["x"]
+                closest_pig_z = closest_pig["z"]
+
+                agent_host.sendCommand("turn 0.5")
+                time.sleep(1)
+                agent_host.sendCommand("turn 0")
+
+                agent_host.sendCommand("pitch -0.5")
+                time.sleep(1)
+                agent_host.sendCommand("pitch 0")
+
+                agent_host.sendCommand("pitch 0.5")
+                time.sleep(1)
+                agent_host.sendCommand("pitch 0")
+
+                #turn the other way
+                agent_host.sendCommand("turn -0.5")
+                time.sleep(2)
+                agent_host.sendCommand("turn 0")
+
+                agent_host.sendCommand("pitch -0.5")
+                time.sleep(1)
+                agent_host.sendCommand("pitch 0")
+
+                agent_host.sendCommand("pitch 0.5")
+                time.sleep(1)
+                agent_host.sendCommand("pitch 0")
+                time.sleep(1)
+
+                if los["type"] == "Pig" and los["x"] == closest_pig_x:
+                    print los["x"], closest_pig_x
+                    print los["z"], closest_pig_z
+                    break
+                #do something with these coordinates
+            if los["inRange"] and los["type"] == "Pig" and los["x"] == closest_pig["x"]:
+                print "found the piggy, lets hit it"
+                agent_host.sendCommand("attack 1")
+                time.sleep(0.5)
+                agent_host.sendCommand("attack 0")
+
+
         #     #TODO:while not in range, move to closest pig
         #     # print los["x"], los["z"], closest_pig["x"], closest_pig["x"]
         #     #if the object in line of sight has same x and z value as closest pig, we found the right one, if its in range,
