@@ -141,6 +141,58 @@ while not world_state.has_mission_begun:
 print
 print "Mission running ",
 
+def get_chatty(observation):
+    if 'Entities' in observation:
+        entities = observation["Entities"]
+        for ent in entities:
+            if ent["name"] == "Chatty":
+                chatty = ent
+    return chatty
+
+def find_closest_pig(observation, chatty):
+    distanceToChattyFromPig = -999
+
+    if 'Entities' in observation:
+        entities = observation['Entities']
+        pigList = []
+        # get the pig and chatty entities
+        # chatty is the user
+        for ent in entities:
+            if ent["name"] == 'Pig':
+                pigList.append(ent)
+        # if chatty is not None, get the x and z coordinates
+        if chatty != None:
+            chatty_x = chatty["x"]
+            chatty_z = chatty["z"]
+            distanceList = []
+
+            for pig in pigList:
+                pig_x = pig["x"]
+                pig_z = pig["z"]
+
+                # distance formula to get distance from any pig to chatty
+                distanceToChattyFromPig = math.sqrt(abs((abs(chatty_x - pig_x) ** 2) - (abs(chatty_z - pig_z) ** 2)))
+                distanceList.append(distanceToChattyFromPig)
+                if distanceToChattyFromPig == min(distanceList):
+                    closest_pig = pig
+
+    return closest_pig
+
+def found_pig(los_type, los_x, closest_pig_x):
+    return ((los_type == "Pig") and (los_x == closest_pig_x))
+
+def piggy_in_range(in_range, los_type, los_x, closest_pig_x):
+    return in_range and los_type == "Pig" and los_x == closest_pig_x
+
+def attack_once():
+    agent_host.sendCommand("attack 1")
+    time.sleep(0.5)
+    agent_host.sendCommand("attack 0")
+
+def turn_pitch_discrete_move(command, number):
+    agent_host.sendCommand(command + " " + number)
+    time.sleep(1)
+    agent_host.sendCommand(command + " 0")
 
 # Loop until mission ends:
 while world_state.is_mission_running:
@@ -149,80 +201,17 @@ while world_state.is_mission_running:
     time.sleep(0.5)
     print "\nSending action: chat %s" % str_command
     agent_host.sendCommand("chat %s" % str_command)
-
     agent_host.sendCommand(str_command)
-
-
-    #TODO: USE NLP TO CONVERT STR_COMMAND TEXT INTO VALID ACTION
-    # action = str_command
-    # action_list = []
-    # if action in action_list:
-    #     agent_host.sendCommand(str_command)
-    # else:
-    #     #if command not in list of functionality, print error
-    #     agent_host.sendCommand("chat %s", "invalid move or unsupported function!")
 
     sys.stdout.write(".")
 
     world_state = agent_host.getWorldState()
 
-    # print world_state.observations[-1].text
-    #kill pig
 
     if len(world_state.observations) > 0:
-        #JSON OBJECT: observation
         observation = json.loads(world_state.observations[-1].text)
-        chatty = None
-        closest_pig = None
-        distanceToChattyFromPig = -999
-        if 'Entities' in observation:
-            entities = observation['Entities']
-            pigList = []
-            #get the pig and chatty entities
-            #chatty is the user
-            for ent in entities:
-                if ent["name"] == 'Pig':
-                    pigList.append(ent)
-                if ent["name"] == "Chatty":
-                    chatty = ent
-            #if chatty is not None, get the x and z coordinates
-            if chatty != None:
-                chatty_x = chatty["x"]
-                chatty_z = chatty["z"]
-                # print chatty_x, chatty_z
-                chatty_sum = chatty_x+chatty_z
-                # print pigList[0]
-                #TODO: change way to find shortest distance to pig
-                distanceList = []
-                #TODO: change this
-                for pig in pigList:
-                    pig_x = pig["x"]
-                    pig_z = pig["z"]
-
-                    # print "values are"
-                    # print (chatty_x, chatty_z, pig_x, pig_z)
-                    # x_distance = (abs(chatty_x - pig_x))**2
-                    # print x_distance
-                    # z_distance = (abs(chatty_z - pig_z))**2
-                    # print z_distance
-                    #distance formula to get distance from any pig to chatty
-                    distanceToChattyFromPig = math.sqrt(abs((abs(chatty_x - pig_x)**2) - (abs(chatty_z - pig_z)**2)))
-                    distanceList.append(distanceToChattyFromPig)
-
-                print distanceList
-                #Check if the pig's distance is the smallest one in distanceList, if true, set the pig to the closest.
-                for pig in pigList:
-                    pig_x = pig["x"]
-                    pig_z = pig["z"]
-                    distanceToChattyFromPig = math.sqrt(abs((abs(chatty_x - pig_x) ** 2) - (abs(chatty_z - pig_z) ** 2)))
-                    if distanceToChattyFromPig == min(distanceList):
-                        #set closest pig here.
-                        closest_pig = pig
-                        #stop checking the piglist
-                        break
-                        # print distanceToChattyFromPig
-                        # print "closest"
-                        # print closest_pig
+        chatty = get_chatty(observation)
+        closest_pig = find_closest_pig(observation, chatty)
 
 
         #ObsFromRay usage here
@@ -231,8 +220,7 @@ while world_state.is_mission_running:
             los = observation['LineOfSight']
             print chatty
             print closest_pig
-            print distanceToChattyFromPig
-            # print los["inRange"]
+
             # if the closest piggy is not in sight, use the coordinates to pitch and turn accordingly
             while (los["x"] != closest_pig["x"]) and los["z"] != closest_pig["z"]:
                 chatty_x = chatty["x"]
@@ -240,42 +228,41 @@ while world_state.is_mission_running:
                 closest_pig_x = closest_pig["x"]
                 closest_pig_z = closest_pig["z"]
 
-                agent_host.sendCommand("turn 0.5")
-                time.sleep(1)
-                agent_host.sendCommand("turn 0")
+                if not found_pig(los["type"], los["x"], closest_pig_x):
+                    #update los and closest_pig
+                    observation = json.loads(world_state.observations[-1].text)
+                    turn_pitch_discrete_move("turn", "0.5")
 
-                agent_host.sendCommand("pitch -0.5")
-                time.sleep(1)
-                agent_host.sendCommand("pitch 0")
+                elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
+                    attack_once()
 
-                agent_host.sendCommand("pitch 0.5")
-                time.sleep(1)
-                agent_host.sendCommand("pitch 0")
+                if not found_pig(los["type"], los["x"], closest_pig_x):
+                    turn_pitch_discrete_move("pitch", "0.5")
+                elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
+                    attack_once()
+
+                if not found_pig(los["type"], los["x"], closest_pig_x):
+                    turn_pitch_discrete_move("pitch", "-0.5")
+                elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
+                    attack_once()
 
                 #turn the other way
-                agent_host.sendCommand("turn -0.5")
-                time.sleep(2)
-                agent_host.sendCommand("turn 0")
+                if not found_pig(los["type"], los["x"], closest_pig_x):
+                    turn_pitch_discrete_move("turn", "-2")
+                elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
+                    attack_once()
 
-                agent_host.sendCommand("pitch -0.5")
-                time.sleep(1)
-                agent_host.sendCommand("pitch 0")
+                if not found_pig(los["type"], los["x"], closest_pig_x):
+                    turn_pitch_discrete_move("pitch", "0.5")
+                elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
+                    attack_once()
 
-                agent_host.sendCommand("pitch 0.5")
-                time.sleep(1)
-                agent_host.sendCommand("pitch 0")
-                time.sleep(1)
+                if not found_pig(los["type"], los["x"], closest_pig_x):
+                    turn_pitch_discrete_move("pitch", "-0.5")
+                elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
+                    attack_once()
 
-                if los["type"] == "Pig" and los["x"] == closest_pig_x:
-                    print los["x"], closest_pig_x
-                    print los["z"], closest_pig_z
-                    break
-                #do something with these coordinates
-            if los["inRange"] and los["type"] == "Pig" and los["x"] == closest_pig["x"]:
-                print "found the piggy, lets hit it"
-                agent_host.sendCommand("attack 1")
-                time.sleep(0.5)
-                agent_host.sendCommand("attack 0")
+                time.sleep(1)
 
 
         #     #TODO:while not in range, move to closest pig
@@ -296,6 +283,7 @@ while world_state.is_mission_running:
 
     for error in world_state.errors:
         print "Error:",error.text
+
 
 print
 print "Mission ended"
