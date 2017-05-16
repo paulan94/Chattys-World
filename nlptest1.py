@@ -61,10 +61,10 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
       <FlatWorldGenerator generatorString="3;7,220*1,5*3,2;3;,biome_1"/>
       <DrawingDecorator>
         <!-- coordinates for cuboid are inclusive -->
-        <DrawCuboid x1="0" y1="46" z1="0" x2="10" y2="52" z2="7" type="grass" /> <!-- limits of our arena -->
-        <DrawCuboid x1="1" y1="47" z1="1" x2="10" y2="52" z2="6" type="air" /> <!-- limits of our arena -->
-        <DrawCuboid x1="1" y1="52" z1="1" x2="10" y2="51" z2="6" type="glowstone" />            <!-- limits of our arena -->
-        <DrawCuboid x1="1" y1="48" z1="1" x2="1" y2="49" z2="3" ''' + spawn_end_tag + '''
+        <DrawCuboid x1="1" y1="46" z1="0" x2="75" y2="52" z2="75" type="grass" /> <!-- limits of our arena -->
+        <DrawCuboid x1="1" y1="47" z1="1" x2="75" y2="52" z2="75" type="air" /> <!-- limits of our arena -->
+        <DrawCuboid x1="1" y1="56" z1="1" x2="75" y2="53" z2="75" type="glowstone" />            <!-- limits of our arena -->
+        <DrawCuboid x1="37" y1="46" z1="25" x2="40" y2="46" z2="25" ''' + spawn_end_tag + '''
         <DrawItem    x="4"   y="47"  z="2" type="'''+obj_id+'''" />
       </DrawingDecorator>
       <ServerQuitFromTimeUp timeLimitMs="300000"/>
@@ -82,6 +82,12 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
       <ObservationFromNearbyEntities>
         <Range name="Entities" xrange="10" yrange="10" zrange="10"/>
       </ObservationFromNearbyEntities>
+      <ObservationFromGrid>
+          <Grid name="floor3x3">
+            <min x="-1" y="-1" z="-1"/>
+            <max x="1" y="-1" z="1"/>
+          </Grid>
+      </ObservationFromGrid>
       <VideoProducer want_depth="false">
           <Width>640</Width>
           <Height>480</Height>
@@ -98,8 +104,6 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 # </RewardForSendingMatchingChatMessage>
 
 # Create default Malmo objects:
-
-
 
 agent_host = MalmoPython.AgentHost()
 try:
@@ -151,7 +155,7 @@ def get_chatty(observation):
 
 def find_closest_pig(observation, chatty):
     distanceToChattyFromPig = -999
-
+    closest_pig = None
     if 'Entities' in observation:
         entities = observation['Entities']
         pigList = []
@@ -206,6 +210,8 @@ while world_state.is_mission_running:
     sys.stdout.write(".")
 
     world_state = agent_host.getWorldState()
+    # observation = json.loads(world_state.observations[-1].text)
+    print world_state
 
 
     if len(world_state.observations) > 0:
@@ -213,10 +219,9 @@ while world_state.is_mission_running:
         chatty = get_chatty(observation)
         closest_pig = find_closest_pig(observation, chatty)
 
-
         #ObsFromRay usage here
         #TODO: use the observation to possiobly get direction object is facing
-        if 'LineOfSight' in observation:
+        if 'LineOfSight' in observation and closest_pig != None:
             los = observation['LineOfSight']
             print chatty
             print closest_pig
@@ -227,10 +232,17 @@ while world_state.is_mission_running:
                 chatty_z = chatty["z"]
                 closest_pig_x = closest_pig["x"]
                 closest_pig_z = closest_pig["z"]
+                world_state = agent_host.getWorldState()
+
 
                 if not found_pig(los["type"], los["x"], closest_pig_x):
                     #update los and closest_pig
-                    observation = json.loads(world_state.observations[-1].text)
+                    # print world_state
+                    # observation = json.loads(world_state.observations[-1].text)
+                    # grid = observation.get(u'floor3x3', 0)
+                    # print grid
+                    los = observation['LineOfSight']
+                    print los
                     turn_pitch_discrete_move("turn", "0.5")
 
                 elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
