@@ -36,10 +36,10 @@ items = {'red_flower':'flower',
          'diamond_sword':'sword'
          }
 
-MOB_TYPE = "Pig"
-spawn_end_tag = ' type="mob_spawner" variant="' + MOB_TYPE + '"/>'
+#MOB_TYPE = "Pig"
+#spawn_end_tag = ' type="mob_spawner" variant="' + MOB_TYPE + '"/>'
 
-obj_id = items.keys()[random.randint(0, len(items)-1)]
+#obj_id = items.keys()[random.randint(0, len(items)-1)]
 
 mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -58,15 +58,84 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
             <AllowSpawning>true</AllowSpawning>   <!-- CHANGED TO TRUE --> 
       </ServerInitialConditions>
     <ServerHandlers>
-      <FlatWorldGenerator generatorString="3;7,220*1,5*3,2;3;,biome_1"/>
-      <DrawingDecorator>
-        <!-- coordinates for cuboid are inclusive -->
-        <DrawCuboid x1="1" y1="46" z1="0" x2="75" y2="52" z2="75" type="grass" /> <!-- limits of our arena -->
-        <DrawCuboid x1="1" y1="47" z1="1" x2="75" y2="52" z2="75" type="air" /> <!-- limits of our arena -->
-        <DrawCuboid x1="1" y1="56" z1="1" x2="75" y2="53" z2="75" type="glowstone" />            <!-- limits of our arena -->
-        <DrawCuboid x1="37" y1="46" z1="25" x2="40" y2="46" z2="25" ''' + spawn_end_tag + '''
-        <DrawItem    x="4"   y="47"  z="2" type="'''+obj_id+'''" />
-      </DrawingDecorator>
+       <FlatWorldGenerator generatorString="3;7,220*1,5*3,2;3;,biome_1" forceReset="true"/>
+        <DrawingDecorator>
+            <!-- coordinates for cuboid are inclusive -->
+            <!--floor-->
+            <DrawCuboid x1="0" y1="40" z1="0" x2="76" y2="50" z2="76" type="grass" /> <!-- limits of our arena -->
+            
+            <DrawCuboid x1="9" y1="40" z1="0" x2="9" y2="40" z2="76" type="glowstone" />
+            <DrawCuboid x1="19" y1="40" z1="0" x2="19" y2="40" z2="76" type="glowstone" />
+            <DrawCuboid x1="28" y1="40" z1="0" x2="28" y2="40" z2="76" type="glowstone" />
+            <DrawCuboid x1="32" y1="40" z1="0" x2="32" y2="40" z2="76" type="glowstone" />
+            <DrawCuboid x1="38" y1="40" z1="0" x2="38" y2="40" z2="76" type="glowstone" />
+            <DrawCuboid x1="45" y1="40" z1="0" x2="45" y2="40" z2="76" type="glowstone" />
+            <DrawCuboid x1="57" y1="40" z1="0" x2="57" y2="40" z2="76" type="glowstone" />
+            <DrawCuboid x1="66" y1="40" z1="0" x2="66" y2="40" z2="76" type="glowstone" />
+            <DrawCuboid x1="0" y1="40" z1="38" x2="76" y2="40" z2="38" type="glowstone" />
+            <DrawCuboid x1="0" y1="40" z1="32" x2="76" y2="40" z2="32" type="glowstone" />
+            <DrawCuboid x1="0" y1="40" z1="9" x2="76" y2="40" z2="9" type="glowstone" />
+            <DrawCuboid x1="0" y1="40" z1="19" x2="76" y2="40" z2="19" type="glowstone" />
+            <DrawCuboid x1="0" y1="40" z1="57" x2="76" y2="40" z2="57" type="glowstone" />
+            <DrawCuboid x1="0" y1="40" z1="66" x2="76" y2="40" z2="66" type="glowstone" />
+            <DrawCuboid x1="0" y1="40" z1="28" x2="76" y2="40" z2="28" type="glowstone" />
+            <DrawCuboid x1="0" y1="40" z1="45" x2="76" y2="40" z2="45" type="glowstone" />
+            <DrawCuboid x1="0" y1="40" z1="0" x2="76" y2="40" z2="0" type="glowstone" />
+            <DrawCuboid x1="0" y1="40" z1="76" x2="76" y2="40" z2="76" type="glowstone" />
+            <DrawCuboid x1="0" y1="40" z1="0" x2="0" y2="40" z2="76" type="glowstone" />
+            <DrawCuboid x1="76" y1="40" z1="0" x2="76" y2="40" z2="76" type="glowstone" />
+            
+            <!--water and lava-->
+            <DrawCuboid x1="67" y1="40" z1="1" x2="75" y2="50" z2="8" type="water" /> 
+            <DrawCuboid x1="1" y1="40" z1="67" x2="8" y2="50" z2="75" type="lava" /> 
+            
+            
+            <!--air-->
+            <DrawCuboid x1="0" y1="41" z1="0" x2="76" y2="50" z2="76" type="air" /> <!-- limits of our arena -->
+           
+            <!--ceiling-->
+            <DrawCuboid x1="0" y1="50" z1="0" x2="76" y2="50" z2="76" type="glowstone" />            <!-- limits of our arena -->   
+              <!--house-->
+            <DrawBlock type="planks" x="71" y="41" z="70"/>
+            <DrawBlock type="planks" x="71" y="41" z="72"/>
+            <DrawBlock type="planks" x="70" y="41" z="70"/>
+            <DrawBlock type="planks" x="70" y="41" z="72"/>
+            <DrawBlock type="planks" x="72" y="41" z="70"/>
+            <DrawBlock type="planks" x="72" y="41" z="71"/>
+            <DrawBlock type="planks" x="72" y="41" z="72"/>
+          
+            <DrawBlock type="planks" x="71" y="42" z="70"/>
+            <DrawBlock type="planks" x="71" y="42" z="72"/>
+            <DrawBlock type="planks" x="70" y="42" z="70"/>
+            <DrawBlock type="planks" x="70" y="42" z="72"/>
+            <DrawBlock type="planks" x="72" y="42" z="70"/>
+            <DrawBlock type="planks" x="72" y="42" z="71"/>
+            <DrawBlock type="planks" x="72" y="42" z="72"/>        
+          
+            <DrawBlock type="planks" x="71" y="43" z="70"/>
+            <DrawBlock type="planks" x="71" y="43" z="71"/>
+            <DrawBlock type="planks" x="71" y="43" z="72"/>
+            <DrawBlock type="planks" x="70" y="43" z="70"/>
+            <DrawBlock type="planks" x="70" y="43" z="71"/>
+            <DrawBlock type="planks" x="70" y="43" z="72"/>
+            <DrawBlock type="planks" x="72" y="43" z="70"/>
+            <DrawBlock type="planks" x="72" y="43" z="71"/>
+            <DrawBlock type="planks" x="72" y="43" z="72"/>
+          
+            <DrawBlock type="planks" x="71" y="44" z="71"/>
+            
+            <!-- place mobs -->
+            <DrawEntity x="20"  y="41" z="20" type="Pig" />
+            <DrawEntity x="2"  y="41" z="25" type="Cow" />
+            <DrawEntity x="25"  y="41" z="2" type="Chicken" />
+            
+            <!--spawners-->
+            <DrawCuboid x1="29" y1="40" z1="29" x2="29" y2="40" z2="29" type="mob_spawner" variant="Pig"/>
+            <DrawCuboid x1="31" y1="40" z1="31" x2="31" y2="40" z2="31" type="mob_spawner" variant="Chicken"/>
+            <DrawCuboid x1="29" y1="40" z1="31" x2="29" y2="40" z2="31" type="mob_spawner" variant="Cow"/>
+            <DrawCuboid x1="31" y1="40" z1="29" x2="31" y2="40" z2="29" type="mob_spawner" variant="Sheep"/>
+
+        </DrawingDecorator>
       <ServerQuitFromTimeUp timeLimitMs="300000"/>
       <ServerQuitWhenAnyAgentFinishes/>
     </ServerHandlers>
@@ -74,7 +143,11 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
   <AgentSection mode="Survival">
     <Name>Chatty</Name>
     <AgentStart>
-      <Placement x="3" y="47.0" z="3" pitch="30" yaw="270"/>
+      <Placement x="4" y="43" z="4" pitch="30" yaw="270"/>
+      <Inventory>
+        <InventoryItem slot="0" type="diamond_pickaxe"/>
+        <InventoryItem slot="1" type="diamond_sword"/>
+      </Inventory>
     </AgentStart>
     <AgentHandlers>
       <ObservationFromFullStats/>
@@ -82,18 +155,13 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
       <ObservationFromNearbyEntities>
         <Range name="Entities" xrange="10" yrange="10" zrange="10"/>
       </ObservationFromNearbyEntities>
-      <ObservationFromGrid>
-          <Grid name="floor3x3">
-            <min x="-1" y="-1" z="-1"/>
-            <max x="1" y="-1" z="1"/>
-          </Grid>
-      </ObservationFromGrid>
       <VideoProducer want_depth="false">
           <Width>640</Width>
           <Height>480</Height>
       </VideoProducer>
       <ContinuousMovementCommands/>
       <ChatCommands />
+      <InventoryCommands/>
       <RewardForSendingCommand reward="-1"/>
     </AgentHandlers>
   </AgentSection>
@@ -104,6 +172,8 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 # </RewardForSendingMatchingChatMessage>
 
 # Create default Malmo objects:
+
+
 
 agent_host = MalmoPython.AgentHost()
 try:
@@ -155,7 +225,7 @@ def get_chatty(observation):
 
 def find_closest_pig(observation, chatty):
     distanceToChattyFromPig = -999
-    closest_pig = None
+
     if 'Entities' in observation:
         entities = observation['Entities']
         pigList = []
@@ -210,8 +280,6 @@ while world_state.is_mission_running:
     sys.stdout.write(".")
 
     world_state = agent_host.getWorldState()
-    # observation = json.loads(world_state.observations[-1].text)
-    print world_state
 
 
     if len(world_state.observations) > 0:
@@ -219,9 +287,10 @@ while world_state.is_mission_running:
         chatty = get_chatty(observation)
         closest_pig = find_closest_pig(observation, chatty)
 
+
         #ObsFromRay usage here
         #TODO: use the observation to possiobly get direction object is facing
-        if 'LineOfSight' in observation and closest_pig != None:
+        if 'LineOfSight' in observation:
             los = observation['LineOfSight']
             print chatty
             print closest_pig
@@ -232,17 +301,10 @@ while world_state.is_mission_running:
                 chatty_z = chatty["z"]
                 closest_pig_x = closest_pig["x"]
                 closest_pig_z = closest_pig["z"]
-                world_state = agent_host.getWorldState()
-
 
                 if not found_pig(los["type"], los["x"], closest_pig_x):
                     #update los and closest_pig
-                    # print world_state
-                    # observation = json.loads(world_state.observations[-1].text)
-                    # grid = observation.get(u'floor3x3', 0)
-                    # print grid
-                    los = observation['LineOfSight']
-                    print los
+                    observation = json.loads(world_state.observations[-1].text)
                     turn_pitch_discrete_move("turn", "0.5")
 
                 elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
