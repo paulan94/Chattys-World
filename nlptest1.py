@@ -26,6 +26,7 @@ import time
 import random
 import json
 import math
+import text_movement
 
 sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
 
@@ -150,19 +151,16 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
       </Inventory>
     </AgentStart>
     <AgentHandlers>
-      <ObservationFromFullStats/>
+      <DiscreteMovementCommands/>
+      <!--ContinuousMovementCommands turnSpeedDegs="180"/-->
+      <AbsoluteMovementCommands/>
+      <!--ObservationFromFullStats/-->
       <ObservationFromRay/>
       <ObservationFromNearbyEntities>
-        <Range name="Entities" xrange="10" yrange="10" zrange="10"/>
+        <Range name="Entities" xrange="75" yrange="10" zrange="75"/>
       </ObservationFromNearbyEntities>
-      <VideoProducer want_depth="false">
-          <Width>640</Width>
-          <Height>480</Height>
-      </VideoProducer>
-      <ContinuousMovementCommands/>
-      <ChatCommands />
-      <InventoryCommands/>
-      <RewardForSendingCommand reward="-1"/>
+      <!--InventoryCommands/-->
+      <!--RewardForSendingCommand reward="-1"/-->
     </AgentHandlers>
   </AgentSection>
 </Mission>
@@ -245,12 +243,18 @@ def find_closest_pig(observation, chatty):
                 pig_z = pig["z"]
 
                 # distance formula to get distance from any pig to chatty
-                distanceToChattyFromPig = math.sqrt(abs((abs(chatty_x - pig_x) ** 2) - (abs(chatty_z - pig_z) ** 2)))
+                distanceToChattyFromPig = math.sqrt(abs((abs(chatty_x - pig_x) ** 2) + (abs(chatty_z - pig_z) ** 2)))
                 distanceList.append(distanceToChattyFromPig)
                 if distanceToChattyFromPig == min(distanceList):
                     closest_pig = pig
 
     return closest_pig
+
+def tester(pig, chatty):
+
+        # distance formula to get distance from any pig to chatty
+    distance = math.sqrt(abs((abs(chatty["x"] - pig["x"]) ** 2) + (abs(chatty["z"] - pig["z"]) ** 2)))
+    return distance
 
 def found_pig(los_type, los_x, closest_pig_x):
     return ((los_type == "Pig") and (los_x == closest_pig_x))
@@ -268,14 +272,34 @@ def turn_pitch_discrete_move(command, number):
     time.sleep(1)
     agent_host.sendCommand(command + " 0")
 
+def load_grid(chatty):
+    """
+    Used the agent observation API to get a 21 X 21 grid box around the agent (the agent is in the middle).
+
+    Args
+        world_state:    <object>    current agent world state
+
+    Returns
+        grid:   <list>  the world grid blocks represented as a list of blocks (see Tutorial.pdf)
+    """
+    returnGrid = []
+    grid = [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)]
+    cx = chatty["x"]
+    cz = chatty["z"]
+    for x,z in grid:
+        returnGrid.append((cx+x,cz+z))
+
+
+    return returnGrid
+
 # Loop until mission ends:
 while world_state.is_mission_running:
     str_command = raw_input()
 
     time.sleep(0.5)
-    print "\nSending action: chat %s" % str_command
-    agent_host.sendCommand("chat %s" % str_command)
-    agent_host.sendCommand(str_command)
+ #   print "\nSending action: chat %s" % str_command
+ #   agent_host.sendCommand("chat %s" % str_command)
+  #  agent_host.sendCommand(str_command)
 
     sys.stdout.write(".")
 
@@ -286,57 +310,239 @@ while world_state.is_mission_running:
         observation = json.loads(world_state.observations[-1].text)
         chatty = get_chatty(observation)
         closest_pig = find_closest_pig(observation, chatty)
-
-
-        #ObsFromRay usage here
-        #TODO: use the observation to possiobly get direction object is facing
-        if 'LineOfSight' in observation:
-            los = observation['LineOfSight']
-            print chatty
-            print closest_pig
-
-            # if the closest piggy is not in sight, use the coordinates to pitch and turn accordingly
-            while (los["x"] != closest_pig["x"]) and los["z"] != closest_pig["z"]:
-                chatty_x = chatty["x"]
-                chatty_z = chatty["z"]
-                closest_pig_x = closest_pig["x"]
-                closest_pig_z = closest_pig["z"]
-
-                if not found_pig(los["type"], los["x"], closest_pig_x):
-                    #update los and closest_pig
-                    observation = json.loads(world_state.observations[-1].text)
-                    turn_pitch_discrete_move("turn", "0.5")
-
-                elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
-                    attack_once()
-
-                if not found_pig(los["type"], los["x"], closest_pig_x):
-                    turn_pitch_discrete_move("pitch", "0.5")
-                elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
-                    attack_once()
-
-                if not found_pig(los["type"], los["x"], closest_pig_x):
-                    turn_pitch_discrete_move("pitch", "-0.5")
-                elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
-                    attack_once()
-
-                #turn the other way
-                if not found_pig(los["type"], los["x"], closest_pig_x):
-                    turn_pitch_discrete_move("turn", "-2")
-                elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
-                    attack_once()
-
-                if not found_pig(los["type"], los["x"], closest_pig_x):
-                    turn_pitch_discrete_move("pitch", "0.5")
-                elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
-                    attack_once()
-
-                if not found_pig(los["type"], los["x"], closest_pig_x):
-                    turn_pitch_discrete_move("pitch", "-0.5")
-                elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
-                    attack_once()
-
+        x = int(chatty["x"])
+        z = int(chatty["z"])
+        a = int(closest_pig["x"])
+        b = int(closest_pig["z"])
+        yaw = int(chatty["yaw"])
+        if yaw%360 != 270:
+            print("reset")
+            if yaw%360 == 90:
+                print("90")
+                agent_host.sendCommand("turn 1")
                 time.sleep(1)
+                agent_host.sendCommand("turn 0")
+            elif yaw%360 == 180:
+                print("180")
+                agent_host.sendCommand("turn 1")
+                time.sleep(0.5)
+                agent_host.sendCommand("turn 0")
+            elif yaw%360 == 0:
+                print("360")
+                agent_host.sendCommand("turn -1")
+                time.sleep(0.5)
+                agent_host.sendCommand("turn 0")
+            yaw = 270
+            print("end reset")
+
+        if (x <= a):
+            if yaw%360 != 270:
+                agent_host.sendCommand("turn 1")
+                time.sleep(1)
+                agent_host.sendCommand("turn 0")
+                yaw = 270
+                ("never")
+            for i in range(x, a):
+                agent_host.sendCommand("tp {} 41 {}".format(i, z))
+                time.sleep(0.15)
+            agent_host.sendCommand("turn 1")
+            time.sleep(0.5)
+            agent_host.sendCommand("turn 0")
+            if yaw == 90:
+                yaw = 180
+            elif yaw == 270:
+                yaw = 0
+        else:
+            if yaw%360 != 90:
+                agent_host.sendCommand("turn 1")
+                time.sleep(1)
+                agent_host.sendCommand("turn 0")
+                yaw = 90
+            for i in range(a, x):
+                agent_host.sendCommand("tp {} 41 {}".format(i, z))
+                time.sleep(0.15)
+
+            agent_host.sendCommand("turn 1")
+            time.sleep(0.5)
+            agent_host.sendCommand("turn 0")
+            if yaw == 90:
+                yaw = 180
+            elif yaw == 270:
+                yaw = 0
+
+        if (z <= b):
+            if yaw%360 != 0:
+                agent_host.sendCommand("turn 1")
+                time.sleep(1)
+                agent_host.sendCommand("turn 0")
+                yaw = 0
+
+            for i in range(z, b-1):
+                agent_host.sendCommand("tp {} 41 {}".format(a, i))
+                time.sleep(0.15)
+        else:
+            if yaw%360 != 180:
+                agent_host.sendCommand("turn 1")
+                time.sleep(1)
+                agent_host.sendCommand("turn 0")
+                yaw = 180
+
+            for i in range(b, z-1):
+                agent_host.sendCommand("tp {} 41 {}".format(a, i))
+                time.sleep(0.15)
+
+
+        print("lol")
+
+        #while True:
+
+            # yaw = int(chatty["yaw"])
+            # if x < closest_pig["x"]:
+            #     if yaw%360 != 270:
+            #         agent_host.sendCommand("turn 1")
+            #         agent_host.sendCommand("turn 1")
+            #         yaw = 270
+            #     #while x != closest_pig["x"]:
+            #         agent_host.sendCommand("movewest 1")
+            #         agent_host.sendCommand("movewest 1")
+            #         agent_host.sendCommand("movewest 1")
+            #         agent_host.sendCommand("movewest 1")
+            #
+            #         #x += 1
+            # elif x > closest_pig["x"]:
+            #     if yaw%360 != 90:
+            #         agent_host.sendCommand("turn 1")
+            #         agent_host.sendCommand("turn 1")
+            #         yaw = 90
+            #     while x != closest_pig["x"]:
+            #         agent_host.sendCommand("movewest 1")
+            #        # x -= 1
+            #
+            # if z < closest_pig["z"]:
+            #     if yaw == 270:
+            #         agent_host.sendCommand("turn 1")
+            #     elif yaw == 90:
+            #         agent_host.sendCommand("turn -1")
+            #     while z != closest_pig["z"]:
+            #         agent_host.sendCommand("movewest 1")
+            #         z += 1
+            # elif z > closest_pig["z"]:
+            #     if yaw == 270:
+            #         agent_host.sendCommand("turn -1")
+            #     elif yaw == 90:
+            #         agent_host.sendCommand("turn 1")
+            #     while z != closest_pig["z"]:
+            #         agent_host.sendCommand("movewest 1")
+            #         z -= 1
+            # print(x,z)
+            # break
+
+
+
+
+        # while True:
+        #     dist = tester(closest_pig,chatty)
+        #     if dist < bestDist:
+        #         bestDist = dist
+        #         agent_host.sendCommand("move 1")
+        #         time.sleep(0.1)
+        #         agent_host.sendCommand("move 0")
+        #         world_state = agent_host.getWorldState()
+        #         if len(world_state.observations) > 0:
+        #             observation = json.loads(world_state.observations[-1].text)
+        #         chatty = get_chatty(observation)
+        #     elif dist == bestDist:
+        #         world_state = agent_host.getWorldState()
+        #         if len(world_state.observations) > 0:
+        #             observation = json.loads(world_state.observations[-1].text)
+        #         chatty = get_chatty(observation)
+        #     else:
+        #         agent_host.sendCommand("turn 1")
+        #         time.sleep(0.1)
+        #         agent_host.sendCommand("turn 0")
+        #         agent_host.sendCommand("move 1")
+        #         time.sleep(0.5)
+        #         agent_host.sendCommand("move 0")
+        #
+
+
+
+
+
+
+
+
+
+
+
+
+            # while True:
+        #     agent_host.sendCommand("move 1")
+        #     world_state = agent_host.getWorldState()
+        #     observation = json.loads(world_state.observations[-1].text)
+        #     chatty = get_chatty(observation)
+        #     new = tester(closest_pig, chatty)
+          #  if tester(closest_pig, chatty)
+
+
+
+
+
+
+
+
+
+
+
+            #ObsFromRay usage here
+        #TODO: use the observation to possiobly get direction object is facing
+        # if 'LineOfSight' in observation:
+        #     los = observation['LineOfSight']
+        #     print chatty
+        #     print closest_pig
+        #
+        #     # if the closest piggy is not in sight, use the coordinates to pitch and turn accordingly
+        #     while (los["x"] != closest_pig["x"]) and los["z"] != closest_pig["z"]:
+        #         chatty_x = chatty["x"]
+        #         chatty_z = chatty["z"]
+        #         closest_pig_x = closest_pig["x"]
+        #         closest_pig_z = closest_pig["z"]
+        #
+        #         if not found_pig(los["type"], los["x"], closest_pig_x):
+        #             #update los and closest_pig
+        #             observation = json.loads(world_state.observations[-1].text)
+        #             turn_pitch_discrete_move("turn", "0.5")
+        #
+        #         elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
+        #             attack_once()
+        #
+        #         if not found_pig(los["type"], los["x"], closest_pig_x):
+        #             turn_pitch_discrete_move("pitch", "0.5")
+        #         elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
+        #             attack_once()
+        #
+        #         if not found_pig(los["type"], los["x"], closest_pig_x):
+        #             turn_pitch_discrete_move("pitch", "-0.5")
+        #         elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
+        #             attack_once()
+        #
+        #         #turn the other way
+        #         if not found_pig(los["type"], los["x"], closest_pig_x):
+        #             turn_pitch_discrete_move("turn", "-2")
+        #         elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
+        #             attack_once()
+        #
+        #         if not found_pig(los["type"], los["x"], closest_pig_x):
+        #             turn_pitch_discrete_move("pitch", "0.5")
+        #         elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
+        #             attack_once()
+        #
+        #         if not found_pig(los["type"], los["x"], closest_pig_x):
+        #             turn_pitch_discrete_move("pitch", "-0.5")
+        #         elif piggy_in_range(los["inRange"], los["type"], los["x"], closest_pig_x):
+        #             attack_once()
+        #
+        #         time.sleep(1)
 
 
         #     #TODO:while not in range, move to closest pig
