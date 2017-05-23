@@ -23,7 +23,9 @@ import MalmoPython
 import os
 import sys
 import time
-import text_movement
+import displayGUI
+import classBasedMovement
+from Tkinter import Tk
 
 sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
 
@@ -105,64 +107,21 @@ while not world_state.has_mission_begun:
 
 print
 print "Mission running ",
-#Region the text command code
+#Init class based items
+switcherCommand = classBasedMovement.switcherCommand(agent_host)
+displayGUI = displayGUI.commandWindow( agent_host, my_mission, my_mission_record)
+
 while True:
+    #displayGUI.window.mainloop()
     user_input = raw_input("Command: ")
+    #user_input = displayGUI.okCLicked()
     if user_input == "":
         continue;
     command = user_input.split()
+    print(command)
     #Treating texts in format: verb - range||pace
-    if len(command) == 1:
-        if command[0] == "quit":
-            break
-        if command[0] == "walk":
-            text_movement.walk(agent_host)
-        if command[0] == "stop":
-            text_movement.force_stop(agent_host)
-        if command[0] == "turn":
-            text_movement.turn(agent_host)
-        if command[0] == "pitch":
-            text_movement.pitch(agent_host)
-        if command[0] == "jump":
-            text_movement.jump(agent_host)
-
-
-
-    #Command given is length of 2, so action are changed
-    if len(command) == 2:
-        #Walk variations
-        if command[0] == "walk":
-            if command[1] == "fast":
-                text_movement.walk(agent_host, 3)
-            elif command[1] == "slow":
-                text_movement.walk(agent_host, 0.5)
-            elif type(int(command[1])) is int:
-                text_movement.walk_step(agent_host, command[1])
-
-        #Strafe variations
-        if command[0] == "strafe":
-            if command[1] == "left":
-                text_movement.strafe(agent_host, -.5)
-            elif command[1] == "right":
-                text_movement.strafe(agent_host)
-
-        #Turn command
-        if command[0] == "turn":
-            if command[1] == "left":
-                text_movement.turn(agent_host, -1)
-            elif command[1] == "right":
-                text_movement.turn(agent_host)
-
-    if len(command) == 3 and command[0] == "turn":
-        if command[1] == "left":
-            text_movement.turn(agent_host, -1, float(command[2]))
-        if command[1] == "right":
-            text_movement.turn(agent_host, 1, float(command[2]))
-    if len(command) == 3 and command[0] == "pitch":
-        if command[1] == "down":
-            text_movement.pitch(agent_host, 1, float(command[2]))
-        if command[1] == "up":
-            text_movement.pitch(agent_host, -1, float(command[2]))
+    switcherCommand.commandList = command
+    switcherCommand.interpretCommand()
 #EndRegion
 # Loop until mission ends:
 while world_state.is_mission_running:
