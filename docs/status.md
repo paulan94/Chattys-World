@@ -25,7 +25,7 @@ aiproj/sp17/assignments.html#assignment1). I recommend at least 2-3 paragraphs.
 
 Our big milestone was to be able to compute the distance to the closest entity, and do something interesting with it. We first experimented with Pig entities, by trying to kill them. We decided to compute the Euclidean distance given a list of entities to find the closest one, and then currently move towards it using the Manhattan distance. We wish to implement a working version of approaching the nearest entity using the Euclidean distance in the future.
 
-    _distance = math.sqrt(abs((abs(chatty["x"] - entity["x"]) ** 2) + (abs(chatty["z"] - entity["z"]) ** 2)))_
+_distance = math.sqrt(abs((abs(chatty["x"] - entity["x"]) ** 2) + (abs(chatty["z"] - entity["z"]) ** 2)))_
 
 To approach the entity, we first locate it, and then move on the x and z axis. The world state is then updated to make any sort of correction if the entity has since moved during our initial travel time. There was an issue with the 'yaw' value of our agent exceeding 360, so we worked around that problem by adding a modulo to the yaw to get our agent to turn accordingly.
 	
