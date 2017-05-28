@@ -3,6 +3,16 @@ import os
 import sys
 import time
 
+def base_command(command_list):
+    '''
+    Base command for all implementation
+    The command should be based off the following:
+            Action + adverb + noun
+    Given actions are move|strafe|pitch|turn|jump|crouch|attack|use|stop
+    '''
+
+
+
 def force_stop(agent_host):
     #Command: "stop"
     #Forces agent to stop all continous actions

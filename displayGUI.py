@@ -1,12 +1,16 @@
 import Tkinter as tk
+from Tkinter import END
+import threading
 #import tkfont
 class commandWindow:
 
-    def __init__(self, agent_host, my_mission, my_mission_record):
+
+
+    def __init__(self, agent_host, switcherCommand):
         '''load agent settlers'''
         self.agent_host = agent_host
-        self.my_mission = my_mission
-        self.my_mission_record = my_mission_record
+        self.switcherCommand = switcherCommand
+        self.userInput = "Null"
 
         self.window = tk.Tk(className="Malmo Command:")
         topFrame = tk.Frame(self.window)
@@ -34,14 +38,22 @@ class commandWindow:
     def okClicked(self):
         '''Get the edited values and write them to the file then quit'''
         #TODO: get values and write them to the file!
-        return(self.textWidget.get('1.0', "end"))
+        self.userInput = self.textWidget.get("1.0", END)
+        command = self.userInput.split()
+        self.switcherCommand.commandList = command
+        print(self.switcherCommand.commandList)
+        self.switcherCommand.interpretCommand()
+
 
     def cancelClicked(self):
         '''Cancel edits and quit'''
-        exit()
+        self.switcherCommand.commandList = ["stop"]
+        self.switcherCommand.interpretCommand()
     def restartMission(self):
-        '''restart mission after pressing agent host button'''
+        '''restart mission after pressing restart button'''
         self.agent_host.sendCommand("quit")
+        self.agent_host.startMission(self.my_mission, self.my_mission_record)
+
         # try:
         #     self.agent_host.startMission( self.my_mission, self.my_mission_record)
         # except RuntimeError as e:
@@ -49,11 +61,11 @@ class commandWindow:
         #     exit(1)
         return
 
-def okClicked():
-    '''Get the edited values and write them to the file then quit'''
-    #TODO: get values and write them to the file!
-    return(textWidget.get('1.0', END))
-
-def cancelClicked():
-    '''Cancel edits and quit'''
-    exit()
+# def okClicked():
+#     '''Get the edited values and write them to the file then quit'''
+#     #TODO: get values and write them to the file!
+#     return(textWidget.get('1.0', END))
+#
+# def cancelClicked():
+#     '''Cancel edits and quit'''
+#     exit()
