@@ -8,8 +8,6 @@ title:  Status
 
 The goal of our project is to implement a Natural Language Processing (NLP) system in Minecraft that will accept and interpret user input, and have the Minecraft agent act accordingly. To understand varying user input, we will make use of language processing tools, such as the NLTK and Gensim libraries. The agent actions will be implemented through the use of Microsoft's Malmo API. Of course, not all inputs can be handled, as there are an infinite number of possible inputs that a user can give, as well as limitations on the actions a Minecraft agent can actually perform. Therefore, we will start by implementing basic commands (moving, turning, attacking, etc.), then use these, along with world state observations, to build more intricate commands, including (but not limited to) locating entities, killing mobs, fishing, and finding shelter.  
 
-For this current milestone, we have implemented a working version of POS(Part of Speech) tagging using the nltk library. We used the gensim library to get a word2vector model using Google's GoogleNews-vectors-negative300.bin file. The load time was quite long, so we set a limit to speed things up. We also added a threshold for word similarity, so that if there wasn't a close synonym to a user-inputted word, we would ignore it completely and ask for new input. When calculating the word similarity, we compute the cosine similarity between the user input against all of the available valid Malmo commands. We are able to locate and attack entities. By the end, we wish to implement more functionality, such as finding shelter, fishing, digging. 
-
 ## Approach
 
 Our project is divided into two main parts: (1) the NLP and (2) creating Malmo agent actions. 
