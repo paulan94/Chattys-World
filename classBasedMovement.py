@@ -4,6 +4,8 @@ import sys
 import time
 from itertools import chain
 from nltk.corpus import wordnet
+import gensim
+import tagger
 #A class that defines our movements based on the format
 #The command should be based off the following:
 #        Action + adverb + noun
@@ -35,6 +37,7 @@ commandDict={ 'move': getSynonyms('move'),
     'use': getSynonyms('use'),
     'stop': getSynonyms('stop')
     }
+move_list = ['move', 'strafe', 'pitch', 'turn', 'jump', 'crouch', 'attack', 'use', 'stop']
 class switcherCommand:
 
 
@@ -44,24 +47,54 @@ class switcherCommand:
         self.crouchStatus = False
         self.validFirstWord = False
 
-    def setCommandList(commandList):
+    def setCommandList(self,commandList):
         self.commandList = commandList
 
+    #TODO: some of these commands aren't working properly
     def interpretCommand(self):
         '''
         Alternates between commands first string in command:ist
         Executes method in dictionary
         '''
         commandWord = 'stop'
-        for key, value in commandDict.iteritems():
-            if self.commandList[0] in value:
-                commandWord = key
-                self.validFirstWord = True
-        print(commandWord)
-        # Get the method from 'self'. Default to a lambda.
+        print("CLIST", self.commandList)
+        if self.commandList[0] in move_list:
+            commandWord = self.commandList[0]
+            print "commandwrod", commandWord
+
         method = getattr(self, commandWord, lambda: "nothing")
         # Call the method as we return it
-        return method();
+        # print "dfdf",
+        return method()
+
+        # commandWord = 'stop'
+        # for move in move_list:
+        #     # if self.commandList[0] in move:
+        #     commandWord = move
+        #     self.validFirstWord = True
+        # print("commandword: ",commandWord)
+        # # Get the method from 'self'. Default to a lambda.
+        # method = getattr(self, commandWord, lambda: "nothing")
+        # # Call the method as we return it
+        # # print "dfdf",
+        # return method()
+    # def interpretCommand(self):
+    #     '''
+    #     Alternates between commands first string in command:ist
+    #     Executes method in dictionary
+    #     '''
+    #
+    #     commandWord = 'stop'
+    #     for key, value in commandDict.iteritems():
+    #         if self.commandList[0] in value:
+    #             commandWord = key
+    #             self.validFirstWord = True
+    #     print(commandWord)
+    #     # Get the method from 'self'. Default to a lambda.
+    #     method = getattr(self, commandWord, lambda: "nothing")
+    #     # Call the method as we return it
+    #     print "dfdf", method
+    #     return method();
 
     def stop(self):
         #Command: "stop"
@@ -182,6 +215,7 @@ class switcherCommand:
 
         '''
         #Defaults to jump once
+        print self.commandList, "jmp"
         if(len(self.commandList) == 1):
             self.agent_host.sendCommand("jump 1")
             time.sleep(.5)
@@ -199,6 +233,7 @@ class switcherCommand:
         return
 
     def crouch(self):
+        print("calling crouch...")
         '''
         Crouch command:
         "crouch": crouches/uncrouch depending on crouch status
@@ -214,6 +249,7 @@ class switcherCommand:
         return
 
     def attack(self):
+        print("calling attack...")
         '''
         attack command:
         "attack": defaults to attack once

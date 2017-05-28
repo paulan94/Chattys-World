@@ -7,6 +7,9 @@ import json
 import math
 import text_movement
 from collections import defaultdict
+import classBasedMovement
+import displayGUI
+
 
 sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
 
@@ -209,6 +212,11 @@ while not world_state.has_mission_begun:
 
 print
 print "Mission running ",
+switcherCommand = classBasedMovement.switcherCommand(agent_host)
+displayGUI = displayGUI.commandWindow( agent_host, switcherCommand)
+displayGUI.my_mission = my_mission;
+displayGUI.my_mission_record = my_mission_record;
+displayGUI.window.mainloop()
 
 def get_chatty(observation):
     if 'Entities' in observation:

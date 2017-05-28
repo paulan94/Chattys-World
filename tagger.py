@@ -101,4 +101,4 @@ if __name__ == "__main__":
         tagger_tuple = tagger(user_input)
         threshold = 0.26
         malmo_command = find_closest_command(tagger_tuple[0], model, move_list, threshold)
-        print malmo_command
+        # print malmo_command
