@@ -40,7 +40,7 @@ class switcherCommand:
 
     def __init__(self, agent_host):
         self.agent_host = agent_host
-        self.commandList = {}
+        self.commandList = []
         self.crouchStatus = False
         self.validFirstWord = False
 
@@ -82,11 +82,12 @@ class switcherCommand:
         'walk' - continously walk at speed 1
         'walk 10' - continously walk at 10x speed
         """
+        print(self.commandList)
         #Make agent walk, speed varies based on speed parameter
         if (len(self.commandList) == 1):
             self.agent_host.sendCommand("move 1")
-        else:
-            self.agent_host.sendCommand("move " + self.commandList[1])
+        # else:
+        #     self.agent_host.sendCommand("move " + self.commandList[1])
         return
 
     #TODO: finish a discrete movement command

@@ -60,7 +60,9 @@ missionXML='''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
                 <AgentStart>
                     <Placement x='0' y='56' z='0' yaw='90'/>
                 </AgentStart>
+
                 <AgentHandlers>
+                  <MissionQuitCommands />
                   <ContinuousMovementCommands turnSpeedDegs="180"/>
                 </AgentHandlers>
               </AgentSection>
@@ -109,27 +111,10 @@ print
 print "Mission running ",
 #Init class based items
 switcherCommand = classBasedMovement.switcherCommand(agent_host)
-displayGUI = displayGUI.commandWindow( agent_host, my_mission, my_mission_record)
-
-while True:
-    #displayGUI.window.mainloop()
-    user_input = raw_input("Command: ")
-    #user_input = displayGUI.okCLicked()
-    if user_input == "":
-        continue;
-    command = user_input.split()
-    print(command)
-    #Treating texts in format: verb - range||pace
-    switcherCommand.commandList = command
-    switcherCommand.interpretCommand()
-#EndRegion
-# Loop until mission ends:
-while world_state.is_mission_running:
-    sys.stdout.write(".")
-    time.sleep(0.1)
-    world_state = agent_host.getWorldState()
-    for error in world_state.errors:
-        print "Error:",error.text
+displayGUI = displayGUI.commandWindow( agent_host, switcherCommand)
+displayGUI.my_mission = my_mission;
+displayGUI.my_mission_record = my_mission_record;
+displayGUI.window.mainloop()
 
 print
 print "Mission ended"
