@@ -16,10 +16,23 @@ paragraphs, lists, blockquotes, tables, etc.
 
 This is a paragraph (in Markdown). Some more
 text here.
-. Change the main page of the project to be something more
-interesting, by including things like images/screenshots that are appropriate to your project, links to you
-source code repository, links to pages, videos, or other resources you found relevant, and/or a summary of
-your project.
+
+[title](https://github.com/paulan94/Minecraftbois28/blob/master/docs/index.md)
+
+Summary:
+	Welcome to the home page of Chatty's World! Chatty lives in the world of Minecraft and is dictated by his supreme overlords. Chatty does not have a mind of his own, and only does what his commanders tell him to do. For this current milestone, we have implemented a working version of POS(Part of Speech) tagging using the nltk library. We used the gensim library to get a word2vector model using Google's GoogleNews-vectors-negative300.bin model. The load time was quite long, so we set a limit to speed things up. We also added a threshold for word similarity, so that if there wasn't a close synonym to a user-inputted word, we would ignore it completely and ask for new input. 
+
+	This is the list of available commands in Malmo some of the accepted pairs our system allows:
+	- **move**		(go, pass, progress, and many more)
+	- **strafe**	(this is a unique word, so we will only accept 'strafe')
+	- **pitch**		(this is a unique word, so we will only accept 'pitch')
+	- **turn**		(rotate, spin, revolve, twist, and more)
+	- **jump**		(hop, skip, and more)
+	- **crouch**	(squat, kneel, heel, more)
+	- **attack**	(strike, assault, more)
+	- **use** 		(utilize, deploy, manipulate, exploit, more)
+	- **stop**		(halt, end, terminate, quit)
+
 
 This is another paragraph.
 
