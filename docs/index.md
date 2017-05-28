@@ -16,6 +16,10 @@ paragraphs, lists, blockquotes, tables, etc.
 
 This is a paragraph (in Markdown). Some more
 text here.
+. Change the main page of the project to be something more
+interesting, by including things like images/screenshots that are appropriate to your project, links to you
+source code repository, links to pages, videos, or other resources you found relevant, and/or a summary of
+your project.
 
 This is another paragraph.
 
