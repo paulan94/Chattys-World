@@ -31,7 +31,7 @@ type of evaluation that you perform.
 
 A big part of our evaluation was to make sure our system was functional. In this milestone, we wanted to make sure that we could approach entities and do some sort of interaction with them. We want to implement a number of commands we could feed our agent, and make sure they execute in a sensible way.
 
-The next part of our evaluation is in our word pairing. The graph below demonstrates how we use the cosign similarity to find the closest matched Malmo command. The input in the example below is with input "utilize" which is paired to the "use" command in Malmo as it holds the highest cosign similarity. The other image is a screenshot of how we tested the cosign similarities within our code. 
+The next part of our evaluation is in our word pairing. The graph below demonstrates how we use the cosign similarity to find the closest matched Malmo command. The input in the example below is with input "utilize" which is paired to the "use" command in Malmo as it holds the highest cosign similarity. The other image is a screenshot of how we tested the cosign similarities within our code using the word "hop."
 
 We want to ensure the closeness of pairing words that are synonymous with the valid Malmo commands. The gensim library helped us for this, but there are a few edge cases we would like to handle in the future. 
 
