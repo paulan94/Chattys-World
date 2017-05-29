@@ -32,6 +32,9 @@ type of evaluation that you perform.
 A big part of our evaluation was to make sure our system was functional. In this milestone, we wanted to make sure that we could approach entities and do some sort of interaction with them. We want to implement a number of commands we could feed our agent, and make sure they execute in a sensible way.
 
 The next chunk of our evaluation is in our word pairing. We want to ensure the closeness of pairing words that are synonymous with the valid Malmo commands. The gensim library helped us for this, but there are a few edge cases we would like to handle in the future. 
+![GitHub Logo](utilizechart.png)
+Format: ![Alt Text](url)
+
 
 
 ◦ Remaining Goals and Challenges: In a few paragraphs, describe your goals for the next 2-3 weeks, when
