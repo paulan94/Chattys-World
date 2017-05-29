@@ -26,7 +26,7 @@ This is the list of available commands in Malmo some of the accepted pairs our s
 - __stop__		(halt, end, terminate, quit)
 
 ## View Chatty in Action
----insert link to video---
+<a href="https://youtu.be/aNxZd19X9CY">Video Demo</a>
 
 ## Tools
 Here are the links to the external libraries/APIs that were used for Chatty's World:<br><br>
