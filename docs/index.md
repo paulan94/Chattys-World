@@ -6,7 +6,7 @@ title:  Home
 # Welcome to Chatty's World
 <img src="http://techgage.com/wp-content/uploads/2016/07/Minecraft.jpg"/>
 
-## [Click Here to See Our Github Repository](https://github.com/paulan94/Minecraftbois28/blob/master/docs/index.md)
+## [Click Here to See Our Github Repository](https://github.com/paulan94/Chattys-World)
 
 ## Summary:
 Welcome to the home page of Chatty's World! Chatty lives in the world of Minecraft and is dictated by his supreme overlords. Chatty does not have a mind of his own, and only does what his commanders tell him to do. Chatty is allowed to interact with the many animals we have summoned into his arena. He has access to a pool where he can fish, and a wooden hut for safety.
