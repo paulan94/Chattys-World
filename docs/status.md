@@ -36,17 +36,6 @@ The next part of our evaluation is in our word pairing. The graph below demonstr
 ![Chart](utilizechart.png)
 ![Chart](hopcode.png)
 
-
-
-◦ Remaining Goals and Challenges: In a few paragraphs, describe your goals for the next 2-3 weeks, when
-the final report is due. At the very least, describe how you consider your prototype to be limited, and what
-you want to add to make it a complete contribution. Note that if you think your algorithm is quite good,
-but have not performed sufficient evaluation, doing them can also be a reasonable goal. Similarly, you may
-propose some baselines (such as a hand-coded policy) that you did not get a chance to implement, but
-want to compare against for the final submission. Finally, given your experience so far, describe some of the
-challenges you anticipate facing by the time your final report is due, how crippling you think it might be,
-and what you might do to solve them.
-
 ## Remaining Goals and Challenges
 
 Within the upcoming weeks, our main goals include buliding upon our NLP handler, improving our current agent actions (find, kill), and creating new actions for our agent to perform. As of right now, our NLP handler can only interpret simple, one-action commands, such as "turn left", "find the pig", and "kill a cow". We want to improve upon this by successfully interpreting compound sentences (2 or more actions/subjects), whether it be a sentence like "find the pig, then kill it" or "find and kill the pig". These two sentences have the same meaning and should produce the same result, but will have to be handled differenly using NLTK. 
