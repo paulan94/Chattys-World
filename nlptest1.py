@@ -10,17 +10,17 @@ from collections import defaultdict
 
 sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
 
-items = {'red_flower':'flower',
-         'apple':'apple',
-         'iron_sword':'sword',
-         'iron_pickaxe':'pickaxe',
-         'diamond_sword':'sword'
-         }
-
 #MOB_TYPE = "Pig"
 #spawn_end_tag = ' type="mob_spawner" variant="' + MOB_TYPE + '"/>'
 
 #obj_id = items.keys()[random.randint(0, len(items)-1)]
+
+randomSpawnNums = []
+for i in range(8):
+    x = random.randint(10, 65)
+    z = random.randint(10, 65)
+    tup = (x,z)
+    randomSpawnNums.append(tup)
 
 mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -43,41 +43,41 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
         <DrawingDecorator>
             <!-- coordinates for cuboid are inclusive -->
             <!--floor-->
-            <DrawCuboid x1="0" y1="40" z1="0" x2="76" y2="50" z2="76" type="grass" /> <!-- limits of our arena -->
+            <DrawCuboid x1="0" y1="50" z1="0" x2="76" y2="60" z2="76" type="grass" />
             
-            <DrawCuboid x1="9" y1="40" z1="0" x2="9" y2="40" z2="76" type="glowstone" />
-            <DrawCuboid x1="19" y1="40" z1="0" x2="19" y2="40" z2="76" type="glowstone" />
-            <DrawCuboid x1="28" y1="40" z1="0" x2="28" y2="40" z2="76" type="glowstone" />
-            <DrawCuboid x1="32" y1="40" z1="0" x2="32" y2="40" z2="76" type="glowstone" />
-            <DrawCuboid x1="38" y1="40" z1="0" x2="38" y2="40" z2="76" type="glowstone" />
-            <DrawCuboid x1="45" y1="40" z1="0" x2="45" y2="40" z2="76" type="glowstone" />
-            <DrawCuboid x1="57" y1="40" z1="0" x2="57" y2="40" z2="76" type="glowstone" />
-            <DrawCuboid x1="66" y1="40" z1="0" x2="66" y2="40" z2="76" type="glowstone" />
-            <DrawCuboid x1="0" y1="40" z1="38" x2="76" y2="40" z2="38" type="glowstone" />
-            <DrawCuboid x1="0" y1="40" z1="32" x2="76" y2="40" z2="32" type="glowstone" />
-            <DrawCuboid x1="0" y1="40" z1="9" x2="76" y2="40" z2="9" type="glowstone" />
-            <DrawCuboid x1="0" y1="40" z1="19" x2="76" y2="40" z2="19" type="glowstone" />
-            <DrawCuboid x1="0" y1="40" z1="57" x2="76" y2="40" z2="57" type="glowstone" />
-            <DrawCuboid x1="0" y1="40" z1="66" x2="76" y2="40" z2="66" type="glowstone" />
-            <DrawCuboid x1="0" y1="40" z1="28" x2="76" y2="40" z2="28" type="glowstone" />
-            <DrawCuboid x1="0" y1="40" z1="45" x2="76" y2="40" z2="45" type="glowstone" />
-            <DrawCuboid x1="0" y1="40" z1="0" x2="76" y2="40" z2="0" type="glowstone" />
-            <DrawCuboid x1="0" y1="40" z1="76" x2="76" y2="40" z2="76" type="glowstone" />
-            <DrawCuboid x1="0" y1="40" z1="0" x2="0" y2="40" z2="76" type="glowstone" />
-            <DrawCuboid x1="76" y1="40" z1="0" x2="76" y2="40" z2="76" type="glowstone" />
+            <DrawCuboid x1="9" y1="50" z1="0" x2="9" y2="50" z2="76" type="glowstone" />
+            <DrawCuboid x1="19" y1="50" z1="0" x2="19" y2="50" z2="76" type="glowstone" />
+            <DrawCuboid x1="28" y1="50" z1="0" x2="28" y2="50" z2="76" type="glowstone" />
+            <DrawCuboid x1="32" y1="50" z1="0" x2="32" y2="50" z2="76" type="glowstone" />
+            <DrawCuboid x1="38" y1="50" z1="0" x2="38" y2="50" z2="76" type="glowstone" />
+            <DrawCuboid x1="45" y1="50" z1="0" x2="45" y2="50" z2="76" type="glowstone" />
+            <DrawCuboid x1="57" y1="50" z1="0" x2="57" y2="50" z2="76" type="glowstone" />
+            <DrawCuboid x1="66" y1="50" z1="0" x2="66" y2="50" z2="76" type="glowstone" />
+            <DrawCuboid x1="0" y1="50" z1="38" x2="76" y2="50" z2="38" type="glowstone" />
+            <DrawCuboid x1="0" y1="50" z1="32" x2="76" y2="50" z2="32" type="glowstone" />
+            <DrawCuboid x1="0" y1="50" z1="9" x2="76" y2="50" z2="9" type="glowstone" />
+            <DrawCuboid x1="0" y1="50" z1="19" x2="76" y2="50" z2="19" type="glowstone" />
+            <DrawCuboid x1="0" y1="50" z1="57" x2="76" y2="50" z2="57" type="glowstone" />
+            <DrawCuboid x1="0" y1="50" z1="66" x2="76" y2="50" z2="66" type="glowstone" />
+            <DrawCuboid x1="0" y1="50" z1="28" x2="76" y2="50" z2="28" type="glowstone" />
+            <DrawCuboid x1="0" y1="50" z1="45" x2="76" y2="50" z2="45" type="glowstone" />
+            <DrawCuboid x1="0" y1="50" z1="0" x2="76" y2="50" z2="0" type="glowstone" />
+            <DrawCuboid x1="0" y1="50" z1="76" x2="76" y2="50" z2="76" type="glowstone" />
+            <DrawCuboid x1="0" y1="50" z1="0" x2="0" y2="50" z2="76" type="glowstone" />
+            <DrawCuboid x1="76" y1="50" z1="0" x2="76" y2="50" z2="76" type="glowstone" />
             
             <!--water and lava-->
-            <DrawCuboid x1="67" y1="40" z1="1" x2="75" y2="40" z2="8" type="water" /> 
-            <!--DrawCuboid x1="1" y1="40" z1="67" x2="8" y2="40" z2="75" type="lava" /--> 
-            
+            <DrawCuboid x1="67" y1="50" z1="1" x2="75" y2="50" z2="75" type="water" />
             
             <!--air-->
-            <DrawCuboid x1="0" y1="41" z1="0" x2="76" y2="50" z2="76" type="air" /> <!-- limits of our arena -->
+            <DrawCuboid x1="0" y1="51" z1="0" x2="76" y2="60" z2="76" type="air" />
+            <DrawCuboid x1="66" y1="51" z1="0" x2="66" y2="51" z2="76" type="glass_pane"/>
+
            
             <!--ceiling-->
-            <DrawCuboid x1="0" y1="50" z1="0" x2="76" y2="50" z2="76" type="glowstone" />            <!-- limits of our arena -->   
+            <DrawCuboid x1="0" y1="60" z1="0" x2="76" y2="60" z2="76" type="glowstone" />          
               <!--house-->
-            <DrawBlock type="planks" x="71" y="41" z="70"/>
+ <!--           <DrawBlock type="planks" x="71" y="41" z="70"/>
             <DrawBlock type="planks" x="71" y="41" z="72"/>
             <DrawBlock type="planks" x="70" y="41" z="70"/>
             <DrawBlock type="planks" x="70" y="41" z="72"/>
@@ -103,19 +103,17 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
             <DrawBlock type="planks" x="72" y="43" z="71"/>
             <DrawBlock type="planks" x="72" y="43" z="72"/>
           
-            <DrawBlock type="planks" x="71" y="44" z="71"/>
+            <DrawBlock type="planks" x="71" y="44" z="71"/>-->
             
             <!-- place mobs -->
-            <DrawEntity x="20"  y="41" z="20" type="Pig" />
-            <DrawEntity x="10"  y="41" z="25" type="EntityHorse" />
-            <DrawEntity x="25"  y="41" z="10" type="Sheep" />
-            <DrawEntity x="20"  y="41" z="60" type="Pig" />
-            <DrawEntity x="2"  y="41" z="55" type="Cow" />
-            <DrawEntity x="55"  y="41" z="10" type="Wolf" />
-
-            
-
-
+            <DrawEntity x="{}"  y="51" z="{}" type="Pig" />
+            <DrawEntity x="{}"  y="51" z="{}" type="Pig" />
+            <DrawEntity x="{}"  y="51" z="{}" type="Sheep" />
+            <DrawEntity x="{}"  y="51" z="{}" type="Sheep" />
+            <DrawEntity x="{}"  y="51" z="{}" type="Cow" />
+            <DrawEntity x="{}"  y="51" z="{}" type="Cow" />
+            <DrawEntity x="{}"  y="51" z="{}" type="EntityHorse" />
+            <DrawEntity x="{}"  y="51" z="{}" type="Wolf" />
 
 
             
@@ -126,23 +124,22 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
             <!--DrawCuboid x1="31" y1="40" z1="29" x2="31" y2="40" z2="29" type="mob_spawner" variant="Sheep"/-->
 
         </DrawingDecorator>
-      <ServerQuitFromTimeUp timeLimitMs="300000"/>
+      <ServerQuitFromTimeUp timeLimitMs="5000000"/>
       <ServerQuitWhenAnyAgentFinishes/>
     </ServerHandlers>
   </ServerSection>
   <AgentSection mode="Survival">
     <Name>Chatty</Name>
     <AgentStart>
-      <Placement x="4" y="43" z="4" pitch="30" yaw="270"/>
+      <Placement x="4" y="53" z="4" pitch="30" yaw="270"/>
       <Inventory>
         <InventoryItem slot="0" type="diamond_pickaxe"/>
         <InventoryItem slot="1" type="diamond_sword"/>
         <InventoryItem slot="2" type="fishing_rod"/>
-        <InventoryItem slot="3" type="apple" quantity="64"/>
+        <InventoryItem slot="3" type="golden_apple" quantity="64"/>
         <InventoryItem slot="4" type="bone" quantity="20"/>
-        <InventoryItem slot="5" type="fish" quantity="10"/>
-        <InventoryItem slot="6" type="carrot" quantity="64"/>
-        <InventoryItem slot="7" type="wheat" quantity="64"/>
+        <InventoryItem slot="5" type="carrot" quantity="64"/>
+        <InventoryItem slot="6" type="wheat" quantity="64"/>
 
       </Inventory>
     </AgentStart>
@@ -160,12 +157,12 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
     </AgentHandlers>
   </AgentSection>
 </Mission>
-'''
-# <RewardForSendingMatchingChatMessage>
-#   <ChatMatch reward="100.0" regex="'''+items[obj_id]+'''" description="Anything that matches the object."/>
-# </RewardForSendingMatchingChatMessage>
-
-# Create default Malmo objects:
+'''.format(randomSpawnNums[0][0],randomSpawnNums[0][1],randomSpawnNums[1][0],
+           randomSpawnNums[1][1],randomSpawnNums[2][0],randomSpawnNums[2][1],
+           randomSpawnNums[3][0],randomSpawnNums[3][1],randomSpawnNums[4][0],
+           randomSpawnNums[4][1],randomSpawnNums[5][0],randomSpawnNums[5][1],
+           randomSpawnNums[6][0],randomSpawnNums[6][1],randomSpawnNums[7][0],
+           randomSpawnNums[7][1])
 
 
 
@@ -253,19 +250,6 @@ def found_pig(los_type, los_x, closest_pig_x):
 def piggy_in_range(obs, animal):
     return obs['inRange'] and obs['type'] == animal
 
-def turn_pitch_discrete_move(command, number):
-    agent_host.sendCommand(command + " " + number)
-    time.sleep(1)
-    agent_host.sendCommand(command + " 0")
-
-def load_grid():
-    latest_ws = agent_host.peekWorldState()
-
-    if latest_ws.number_of_observations_since_last_state > 0:
-        observation = json.loads(latest_ws.observations[-1].text)
-        grid = observation.get(u'floor', 0) 
-    return grid
-
 def findAnimal(animal):
     counter = 0
     agent_host.sendCommand('setPitch 30')
@@ -331,6 +315,22 @@ def findAnimal(animal):
             agent_host.sendCommand("setYaw {}".format(180+angle))
             text_movement.walk_step(agent_host, round(hypotenuse)-3)
 
+def findWater():
+    latest_ws = agent_host.peekWorldState()
+
+    if latest_ws.number_of_observations_since_last_state > 0:
+        observation = json.loads(latest_ws.observations[-1].text)
+
+    chatty = get_chatty(observation)
+
+    x = int(chatty["x"])
+    waterX = 65
+
+    diffX = waterX - x
+
+    if diffX > 0:
+        agent_host.sendCommand("setYaw 270")
+        text_movement.walk_step(agent_host, diffX)
 
 def attack():
     agent_host.sendCommand("attack 1")
@@ -350,7 +350,7 @@ def kill(animal):
 
     counter = 0           
     while True:
-        if counter >= 3:
+        if counter >= 5:
             break
         if not findAnimal(animal):
             counter += 1
@@ -366,15 +366,13 @@ def kill(animal):
                 if observation['MobsKilled'] > killed:
                     break
 
-
-
-
 def fish():
     flag = False
     agent_host.sendCommand('hotbar.3 1')
     agent_host.sendCommand('hotbar.3 0')
 
-    agent_host.sendCommand('setPitch 25')
+    agent_host.sendCommand('setPitch 15')
+    findWater()
 
     start = time.time()
     agent_host.sendCommand('use 1')
@@ -389,7 +387,7 @@ def fish():
         current = time.time()
         latest_ws = agent_host.peekWorldState()
 
-        if current-start >= 45:
+        if current-start >= 30:
             agent_host.sendCommand('use 1')
             agent_host.sendCommand('use 0')
             break
@@ -399,18 +397,14 @@ def fish():
             observation = json.loads(latest_ws.observations[-1].text)
             
         if abs(filter(lambda ent: ent[u'name'] == u'unknown', observation['Entities'])[0][u'y'] - filter(lambda ent: ent[u'name'] == u'unknown', last['Entities'])[0][u'y']) > 0.02:
-##            print("-----------")
-##            print(last['Entities'])
-##            print("***********")
-##            print(observation['Entities'])
             agent_host.sendCommand('use 1')
             agent_host.sendCommand('use 0')
             break
 
 def ride():
     counter = 0
-    agent_host.sendCommand("hotbar.9 1")
-    agent_host.sendCommand("hotbar.9 0")
+    agent_host.sendCommand("hotbar.8 1")
+    agent_host.sendCommand("hotbar.8 0")
     time.sleep(1)
     agent_host.sendCommand("discardCurrentItem")
     
@@ -427,7 +421,7 @@ def ride():
                 if chatty['y'] != "41":
                     break
             
-        if counter >= 10:
+        if counter >= 5:
             break
 
 def stopRide():
@@ -437,10 +431,33 @@ def stopRide():
         chatty = get_chatty(observation)
         x = chatty['x']
         z = chatty['z']
-        agent_host.sendCommand('tp {} 41 {}'.format(x+1, z))
+        agent_host.sendCommand('tp {} 51 {}'.format(x+1, z))
 
-    
-    
+def feed(animal):
+    counter = 0
+    while True:
+        if counter >= 5:
+            break
+        if findAnimal(animal):
+            if animal == "Pig":
+                agent_host.sendCommand("hotbar.6 1")
+                agent_host.sendCommand("hotbar.6 0")
+            elif animal =="Horse":
+                agent_host.sendCommand("hotbar.4 1")
+                agent_host.sendCommand("hotbar.4 0")
+            elif animal == "Wolf":
+                agent_host.sendCommand("hotbar.5 1")
+                agent_host.sendCommand("hotbar.5 0")
+            elif animal == "Cow" or animal == "Sheep":
+                agent_host.sendCommand("hotbar.7 1")
+                agent_host.sendCommand("hotbar.7 0")
+                
+            agent_host.sendCommand('use 1')
+            agent_host.sendCommand('use 0')
+            break
+        else:
+            counter += 1
+        
        
     # Loop until mission ends:
 while world_state.is_mission_running:
@@ -456,48 +473,18 @@ while world_state.is_mission_running:
                 animal = tokens[1].lower().title()
                 findAnimal(animal)
             elif tokens[1].lower() == "water":
-                latest_ws = agent_host.peekWorldState()
-                if latest_ws.number_of_observations_since_last_state > 0:
-                    observation = json.loads(latest_ws.observations[-1].text)
-                chatty = get_chatty(observation)
-
-                x = int(chatty["x"])
-                z = int(chatty["z"])
-                a = 66
-                b = 4
-                
-                agent_host.sendCommand("setYaw 270")
-                        
-                if (x <= a):
-                    agent_host.sendCommand("setYaw 270")
-                    for i in range(x, a):
-                        agent_host.sendCommand("tp {} 41 {}".format(i, z))
-                        time.sleep(0.15)
-
-                else:
-                    agent_host.sendCommand("setYaw 90")
-                    for i in range(x, a, -1):
-                        agent_host.sendCommand("tp {} 41 {}".format(i, z))
-                        time.sleep(0.15)
-
-                if (z <= b):
-                    agent_host.sendCommand("setYaw 0")
-                    for i in range(z, b):
-                        agent_host.sendCommand("tp {} 41 {}".format(a, i))
-                        time.sleep(0.15)
-                else:
-                    agent_host.sendCommand("setYaw 180")
-                    for i in range(z, b,-1):
-                        agent_host.sendCommand("tp {} 41 {}".format(a, i))
-                        time.sleep(0.15)
-
-                agent_host.sendCommand("setYaw 270")
+                findWater()
 
             
         elif tokens[0] == "kill":
             animal = tokens[1].title()
-
             kill(animal)
+
+        elif tokens[0] == "feed":
+            if tokens[1].lower().title() in ["Pig", "Sheep", "Villager", "Horse", "Cow", "Wolf", "Chicken"]:
+                animal = tokens[1].lower().title()
+                feed(animal)
+            
         elif tokens[0] == "fish":
             fish()
         elif tokens[0] == "ride" and tokens[1] == "horse":
