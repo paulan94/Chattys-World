@@ -7,9 +7,6 @@ import json
 import math
 import text_movement
 from collections import defaultdict
-import classBasedMovement
-import displayGUI
-
 
 sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
 
@@ -71,7 +68,7 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
             
             <!--water and lava-->
             <DrawCuboid x1="67" y1="40" z1="1" x2="75" y2="40" z2="8" type="water" /> 
-            <DrawCuboid x1="1" y1="40" z1="67" x2="8" y2="40" z2="75" type="lava" /> 
+            <!--DrawCuboid x1="1" y1="40" z1="67" x2="8" y2="40" z2="75" type="lava" /--> 
             
             
             <!--air-->
@@ -110,12 +107,12 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
             
             <!-- place mobs -->
             <DrawEntity x="20"  y="41" z="20" type="Pig" />
-            <DrawEntity x="10"  y="41" z="25" type="Cow" />
+            <DrawEntity x="10"  y="41" z="25" type="EntityHorse" />
             <DrawEntity x="25"  y="41" z="10" type="Sheep" />
-            <DrawEntity x="20"  y="41" z="60" type="Villager" />
-            <DrawEntity x="2"  y="41" z="55" type="EntityHorse" />
+            <DrawEntity x="20"  y="41" z="60" type="Pig" />
+            <DrawEntity x="2"  y="41" z="55" type="Cow" />
             <DrawEntity x="55"  y="41" z="10" type="Wolf" />
-            <DrawEntity x="55"  y="41" z="55" type="Chicken" />
+
             
 
 
@@ -141,24 +138,23 @@ mission_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
         <InventoryItem slot="0" type="diamond_pickaxe"/>
         <InventoryItem slot="1" type="diamond_sword"/>
         <InventoryItem slot="2" type="fishing_rod"/>
-        
+        <InventoryItem slot="3" type="apple" quantity="64"/>
+        <InventoryItem slot="4" type="bone" quantity="20"/>
+        <InventoryItem slot="5" type="fish" quantity="10"/>
+        <InventoryItem slot="6" type="carrot" quantity="64"/>
+        <InventoryItem slot="7" type="wheat" quantity="64"/>
+
       </Inventory>
     </AgentStart>
     <AgentHandlers>
       <DiscreteMovementCommands/>
       <ContinuousMovementCommands turnSpeedDegs="180"/>
       <AbsoluteMovementCommands/>
-      <!--ObservationFromFullStats/-->
+      <ObservationFromFullStats/>
       <ObservationFromRay/>
       <ObservationFromNearbyEntities>
         <Range name="Entities" xrange="75" yrange="10" zrange="75"/>
       </ObservationFromNearbyEntities>
-      <ObservationFromGrid>
-          <Grid name="floor">
-              <min x="0" y ="-1" z="0"/>
-              <max x="0" y="-1" z="76"/>
-          </Grid>
-      </ObservationFromGrid>
       <InventoryCommands/>
       <!--RewardForSendingCommand reward="-1"/-->
     </AgentHandlers>
@@ -212,11 +208,6 @@ while not world_state.has_mission_begun:
 
 print
 print "Mission running ",
-switcherCommand = classBasedMovement.switcherCommand(agent_host)
-displayGUI = displayGUI.commandWindow( agent_host, switcherCommand)
-displayGUI.my_mission = my_mission;
-displayGUI.my_mission_record = my_mission_record;
-displayGUI.window.mainloop()
 
 def get_chatty(observation):
     if 'Entities' in observation:
@@ -290,44 +281,56 @@ def findAnimal(animal):
                 if piggy_in_range(observation['LineOfSight'], animal):
                     return True
 
-        if counter % 10 == 0:
+        if counter % 500 == 0:
             return False
         
         chatty = get_chatty(observation)
         closest_animal = find_closest_animal(observation, chatty, animal)
 
         if closest_animal == None:
-            return True
+            return False
     
         x = int(chatty["x"])
         z = int(chatty["z"])
         a = int(closest_animal["x"])
         b = int(closest_animal["z"])
+        diffX = x-a
+        diffZ = z-b
+        hypotenuse = math.sqrt((diffX**2) + (diffZ**2))
 
-        agent_host.sendCommand("setYaw 270")
+        if diffZ == 0:
+            diffZ = 0.000000001
+        if hypotenuse == 0:
+            hypotenuse = 0.000000001
+            
+        if (x <= a and z <= b):
+            angle = math.acos(((diffZ**2) + (hypotenuse**2) - (diffX**2)) / (2*abs(diffZ)*abs(hypotenuse)))
+            angle = abs(math.degrees(angle))
+ #           print(angle, diffX, diffZ, hypotenuse)
+            agent_host.sendCommand("setYaw {}".format(360-angle))
+            text_movement.walk_step(agent_host, round(hypotenuse)-3)
+            
+        elif (x >= a and z <= b):
+            angle = math.acos(((diffZ**2) + (hypotenuse**2) - (diffX**2)) / (2*abs(diffZ)*abs(hypotenuse)))
+            angle = abs(math.degrees(angle))
+ #           print(angle, diffX, diffZ, hypotenuse)
+            agent_host.sendCommand("setYaw {}".format(0+angle))
+            text_movement.walk_step(agent_host, round(hypotenuse)-3)
+            
+        elif (x >= a and z >= b):
+            angle = math.acos(((diffZ**2) + (hypotenuse**2) - (diffX**2)) / (2*abs(diffZ)*abs(hypotenuse)))
+            angle = abs(math.degrees(angle))
+ #           print(angle, diffX, diffZ, hypotenuse)
+            agent_host.sendCommand("setYaw {}".format(180-angle))
+            text_movement.walk_step(agent_host, round(hypotenuse)-3)
 
-        if (x <= a):
-            agent_host.sendCommand("setYaw 270")
-            for i in range(x, a):
-                agent_host.sendCommand("tp {} 41 {}".format(i, z))
-                time.sleep(0.15)
+        elif (x <= a and z >= b):
+            angle = math.acos(((diffZ**2) + (hypotenuse**2) - (diffX**2)) / (2*abs(diffZ)*abs(hypotenuse)))
+            angle = abs(math.degrees(angle))
+ #           print(angle, diffX, diffZ, hypotenuse)
+            agent_host.sendCommand("setYaw {}".format(180+angle))
+            text_movement.walk_step(agent_host, round(hypotenuse)-3)
 
-        else:
-            agent_host.sendCommand("setYaw 90")
-            for i in range(x, a, -1):
-                agent_host.sendCommand("tp {} 41 {}".format(i, z))
-                time.sleep(0.15)
-
-        if (z <= b):
-            agent_host.sendCommand("setYaw 0")
-            for i in range(z, b):
-                agent_host.sendCommand("tp {} 41 {}".format(a, i))
-                time.sleep(0.15)
-        else:
-            agent_host.sendCommand("setYaw 180")
-            for i in range(z, b,-1):
-                agent_host.sendCommand("tp {} 41 {}".format(a, i))
-                time.sleep(0.15)
 
 def attack():
     agent_host.sendCommand("attack 1")
@@ -337,34 +340,34 @@ def attack():
 def kill(animal):
     agent_host.sendCommand('hotbar.2 1')
     agent_host.sendCommand('hotbar.2 0')
-    originalEnts = defaultdict(int)
 
     latest_ws = agent_host.peekWorldState()
 
     if latest_ws.number_of_observations_since_last_state > 0:
         observation = json.loads(latest_ws.observations[-1].text)
-        
-        for ent in observation['Entities']:
-            if ent['name'] in ["Pig", "Sheep", "Villager", "Horse", "Cow", "Wolf", "Chicken"]:
-                originalEnts[ent['name']] += 1
+
+        killed = observation['MobsKilled']
+
     counter = 0           
     while True:
+        if counter >= 3:
+            break
         if not findAnimal(animal):
             counter += 1
-        if counter >= 10:
-            break
-        attack()
-        ents = defaultdict(int)
-        latest_ws = agent_host.peekWorldState()
+        else:
+            attack()
+            time.sleep(0.5)
+            agent_host.sendCommand("jump 0")
+            latest_ws = agent_host.peekWorldState()
 
-        if latest_ws.number_of_observations_since_last_state > 0:
-            observation = json.loads(latest_ws.observations[-1].text)
-            for ent in observation['Entities']:
-                if ent['name'] in ["Pig", "Sheep", "Villager", "Horse", "Cow", "Wolf", "Chicken"]:
-                    ents[ent['name']] += 1
+            if latest_ws.number_of_observations_since_last_state > 0:
+                observation = json.loads(latest_ws.observations[-1].text)
 
-        if ents != originalEnts:
-            break
+                if observation['MobsKilled'] > killed:
+                    break
+
+
+
 
 def fish():
     flag = False
@@ -403,7 +406,41 @@ def fish():
             agent_host.sendCommand('use 1')
             agent_host.sendCommand('use 0')
             break
+
+def ride():
+    counter = 0
+    agent_host.sendCommand("hotbar.9 1")
+    agent_host.sendCommand("hotbar.9 0")
+    time.sleep(1)
+    agent_host.sendCommand("discardCurrentItem")
+    
+    while True:
+        if not findAnimal("Horse"):
+            counter += 1
+        else:
+            agent_host.sendCommand('use 1')
+            agent_host.sendCommand('use 0')
+            latest_ws = agent_host.peekWorldState()
+            if latest_ws.number_of_observations_since_last_state > 0:
+                observation = json.loads(latest_ws.observations[-1].text)
+                chatty = get_chatty(observation)
+                if chatty['y'] != "41":
+                    break
             
+        if counter >= 10:
+            break
+
+def stopRide():
+    latest_ws = agent_host.peekWorldState()
+    if latest_ws.number_of_observations_since_last_state > 0:
+        observation = json.loads(latest_ws.observations[-1].text)
+        chatty = get_chatty(observation)
+        x = chatty['x']
+        z = chatty['z']
+        agent_host.sendCommand('tp {} 41 {}'.format(x+1, z))
+
+    
+    
        
     # Loop until mission ends:
 while world_state.is_mission_running:
@@ -463,6 +500,10 @@ while world_state.is_mission_running:
             kill(animal)
         elif tokens[0] == "fish":
             fish()
+        elif tokens[0] == "ride" and tokens[1] == "horse":
+            ride()
+        elif tokens[0] == "stop":
+            stopRide()
   
 
     for error in world_state.errors:
