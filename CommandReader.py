@@ -54,3 +54,4 @@ class CommandReader:
             finalCommands.append((finalVerb, finalNoun))
 
         return finalCommands
+
