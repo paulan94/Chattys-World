@@ -7,7 +7,7 @@ class GensimHelper:
     def __init__(self):
         #model to train on
         self.model = gensim.models.KeyedVectors.load_word2vec_format('GoogleNews-vectors-negative300.bin', binary=True, limit=500000)
-        self.move_list = ['walk', 'turn', 'jump','crouch','find','kill', 'feed', 'ride']
+        self.move_list = ['walk', 'turn', 'jump','crouch','find','kill', 'fish', 'feed', 'ride']
         self.noun_list = ['pig', 'cow', 'sheep', 'wolf', 'horse', 'water']
         self.verbWordnet = {}
         self.nounWordnet = {}
@@ -19,11 +19,9 @@ class GensimHelper:
         self.verbWordnet["hit"] = "kill"
         self.verbWordnet["pivot"] = "turn"
         self.verbWordnet["duck"] = "crouch"
-        self.verbWordnet["cast"] = "fish"
-        self.verbWordnet["tame" = "feed"
+        self.verbWordnet["fish"] = "fish"
 
         self.nounWordnet["sow"] = "pig"
-        self.nounWordnet["piggy"] = "pig"
         self.nounWordnet["calf"] = "cow"
         self.nounWordnet["ox"] = "cow"
         self.nounWordnet["cattle"] = "cow"
@@ -52,13 +50,14 @@ class GensimHelper:
             verb_sim.append(self.model.similarity(verb[0], 'crouch'))  
             verb_sim.append(self.model.similarity(verb[0], 'find'))  
             verb_sim.append(self.model.similarity(verb[0], 'kill'))     
+            verb_sim.append(self.model.similarity(verb[0], 'fish'))     
             verb_sim.append(self.model.similarity(verb[0], 'feed'))     
             verb_sim.append(self.model.similarity(verb[0], 'ride'))     
 
             bestVerb = max(verb_sim)
             bestVerbIndex = verb_sim.index(bestVerb)
 
-            if bestVerb >= 0.3:
+            if bestVerb >= 0.01:
                 return self.move_list[bestVerbIndex].lower()
             else:
                 return None
@@ -95,7 +94,7 @@ class GensimHelper:
             bestNoun = max(noun_sim)
             bestNounIndex = noun_sim.index(bestNoun)
 
-            if bestNoun >= 0.3:
+            if bestNoun >= 0.01:
                 return self.noun_list[bestNounIndex].lower()
             else:
                 return None
