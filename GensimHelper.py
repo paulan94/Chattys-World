@@ -7,7 +7,7 @@ class GensimHelper:
     def __init__(self):
         #model to train on
         self.model = gensim.models.KeyedVectors.load_word2vec_format('GoogleNews-vectors-negative300.bin', binary=True, limit=500000)
-        self.move_list = ['walk', 'turn', 'jump','crouch','find','kill', 'fish', 'feed', 'ride']
+        self.move_list = ['walk', 'turn', 'jump','crouch','find','kill', 'feed', 'ride']
         self.noun_list = ['pig', 'cow', 'sheep', 'wolf', 'horse', 'water']
         self.verbWordnet = {}
         self.nounWordnet = {}
@@ -50,7 +50,6 @@ class GensimHelper:
             verb_sim.append(self.model.similarity(verb[0], 'crouch'))  
             verb_sim.append(self.model.similarity(verb[0], 'find'))  
             verb_sim.append(self.model.similarity(verb[0], 'kill'))     
-            verb_sim.append(self.model.similarity(verb[0], 'fish'))     
             verb_sim.append(self.model.similarity(verb[0], 'feed'))     
             verb_sim.append(self.model.similarity(verb[0], 'ride'))     
 
