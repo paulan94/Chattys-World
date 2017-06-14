@@ -208,7 +208,7 @@ while world_state.is_mission_running:
     time.sleep(0.5)
     sys.stdout.write(".")
 
-    actions = MalmoCommands(agent_host)
+    actions = MalmoCommands.MalmoCommands(agent_host)
     nlp = CommandReader.CommandReader()
 
     while True:
@@ -216,7 +216,7 @@ while world_state.is_mission_running:
         for command in userInput:
             if command[0] == "walk":
                 if command[1] == None:
-                    continue
+                    actions.walk_step(1)
                 elif (isinstance(command[1], int)):
                     actions.walk_step(command[1])
                 elif command[1] in ["pig", "sheep", "horse", "cow", "wolf"]:
@@ -236,6 +236,9 @@ while world_state.is_mission_running:
                 elif command[1] == "water":
                     actions.findWater()
 
+            elif command[0] == "jump":
+                actions.jump()
+                
             elif command[0] == "crouch":
                 actions.crouch()
 
