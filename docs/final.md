@@ -36,4 +36,17 @@ The “find” function is the most important, as many of our other created func
 
 ## Evaluation
 
+### Quantitative Evaluation
+While the success of our action-functions is discrete, in which the results that they produce are essentially the same upon each call, we focused our quantitative evaluation on our project’s ability to find synonyms/similar words with Gensim, and make the correct action-function calls with the correct arguments. To do so, we found several synonyms for each of the recognized verbs and nouns/arguments, and checked if these synonyms were interpreted correctly, by matching with their intended meaning. In the tables below, you can view the results of this evaluation, where the cosine similarity between each subject and synonym is provided.
+
+![Chart](verbEval.png)
+![Chart](nounEval.png)
+
+Within these tables, the results in green represent those which were successful (cosine similarity above 0.24 threshold and closest-matched with target word), and those in red represent results that were unsuccessful (the reason behind its failure is also provided). Though it may not include every single synonym for each word, we did our best to evaluate realistic lists of the terms that a user could use. Through our results, we can see that our Gensim model did a fairly good job at interpreting the synonyms correctly. [23 out of the 32] verbs and [33 out of the 40] nouns that we tested were successful, with ~72% and ~83% accuracies, respectively. With this success rate, commands such as “find the horse and kill the pig” can now be worded in different ways like “pinpoint the pony then pwn the pork”, “locate the stallion then murder the boar”, or “discover the steed then attack the swine”. We also placed the unsuccessful synonyms in a word net, so that if the word is inputted by the user, the Gensim results will be overridden, and the correct action will be performed. With the word net in place, each synonym within the tables above will be interpreted correctly, with a 100% success rate. Any synonyms that were not found in the tables above will be evaluated and interpreted by its cosine score, which we are confident in, given the success of our Gensim model.
+
 ## References
+
+Here are the links to the external libraries/APIs that were used for Chatty's World:<br><br>
+<a href="http://www.nltk.org/">Natural Language Toolkit</a><br>
+<a href="https://radimrehurek.com/gensim/models/word2vec.html">Gensim Word2Vec</a><br>
+<a href="https://www.microsoft.com/en-us/research/project/project-malmo/">Project Malmo</a><br>
