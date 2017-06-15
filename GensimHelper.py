@@ -17,17 +17,20 @@ class GensimHelper:
         self.verbWordnet["spot"] = "find"
         self.verbWordnet["move"] = "walk"
         self.verbWordnet["hit"] = "kill"
+        self.verbWordnet["hop"] = "jump"
+        self.verbWordnet["give"] = "feed"
+        self.verbWordnet["provide"] = "feed"
         self.verbWordnet["pivot"] = "turn"
-        self.verbWordnet["duck"] = "crouch"
         self.verbWordnet["fish"] = "fish"
 
-        self.nounWordnet["sow"] = "pig"
-        self.nounWordnet["calf"] = "cow"
         self.nounWordnet["ox"] = "cow"
-        self.nounWordnet["cattle"] = "cow"
         self.nounWordnet["dog"] = "wolf"
-        self.nounWordnet["puppy"] = "wolf"
-        self.nounWordnet["pup"] = "wolf"
+        self.nounWordnet["bellwether"] = "sheep"
+        self.nounWordnet["doggy"] = "wolf"
+        self.nounWordnet["h2o"] = "water"
+        self.nounWordnet["h20"] = "water"
+        self.nounWordnet["dog"] = "wolf"
+
 
 
 
@@ -56,7 +59,7 @@ class GensimHelper:
             bestVerb = max(verb_sim)
             bestVerbIndex = verb_sim.index(bestVerb)
 
-            if bestVerb >= 0.01:
+            if bestVerb >= 0.24:
                 return self.move_list[bestVerbIndex].lower()
             else:
                 return None
@@ -93,7 +96,7 @@ class GensimHelper:
             bestNoun = max(noun_sim)
             bestNounIndex = noun_sim.index(bestNoun)
 
-            if bestNoun >= 0.01:
+            if bestNoun >= 0.24:
                 return self.noun_list[bestNounIndex].lower()
             else:
                 return None
