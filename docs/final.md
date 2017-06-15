@@ -4,8 +4,7 @@ title: Final Report
 ---
 
 ## Video 
-[![Chatty's World Breakdown](https://img.youtube.com/vi/ulUQLIo7MJY/0.jpg)]
-(https://www.youtube.com/watch?v=ulUQLIo7MJY)
+[![Chatty's World Breakdown](https://img.youtube.com/vi/ulUQLIo7MJY/0.jpg)](https://www.youtube.com/watch?v=ulUQLIo7MJY)
 ## Project Summary
 Welcome to Chatty’s World! Chatty is our Minecraft agent, who is placed in a world full of animals, and given a handful of items to interact with his environment. The objective of Chatty’s World is to allow a human user (like you) to control Chatty’s actions through a command prompt. To succeed in this goal, we focused on two areas: the Natural Language Processing (NLP), which interprets user input, and the implementation of agent actions, where we wrote code to carry out specific tasks.
  
