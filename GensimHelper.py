@@ -22,6 +22,8 @@ class GensimHelper:
         self.verbWordnet["provide"] = "feed"
         self.verbWordnet["pivot"] = "turn"
         self.verbWordnet["fish"] = "fish"
+        self.verbWordnet["stop"] = "stop"
+
 
         self.nounWordnet["ox"] = "cow"
         self.nounWordnet["dog"] = "wolf"
@@ -79,7 +81,7 @@ class GensimHelper:
             return noun[0].lower()
 
         elif noun[1] == "CD":
-            return noun[0]
+            return int(noun[0])
 
         try:
             noun_sim = []

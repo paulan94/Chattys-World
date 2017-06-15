@@ -18,7 +18,7 @@ class CommandReader:
         #append command to existing command (ensures tagger treats first word as verb)
         command = raw_input("Enter command: ")
         command = command.lower()
-        commandList = re.split("and|then|[^a-zA-Z ]+", command)
+        commandList = re.split("and|then|[^a-zA-Z0-9 ]+", command)
 
         for command in commandList:
             if "to" in command:
