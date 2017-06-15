@@ -58,7 +58,12 @@ A pitfall in the find command is that Chatty can find his way to a given entity,
 
 ## References
 
-<a href="https://www.microsoft.com/en-us/research/project/project-malmo/">Project Malmo API</a><br>
+#### Resources
+<a href="https://www.microsoft.com/en-us/research/project/project-malmo/">Project Malmo</a><br>
+<a href="http://microsoft.github.io/malmo/0.14.0/Schemas/MissionHandlers.html">Malmo API Documentation</a><br>
 <a href="http://www.nltk.org/">Natural Language Toolkit Library</a><br>
 <a href="https://radimrehurek.com/gensim/models/word2vec.html">Gensim Word2Vec Library</a><br>
 <a href="https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit">Google's Trained Gensim Model (GoogleNews-vectors-negative300.bin)</a><br>
+
+#### Homepage Image Citation
+Minecraft Agent with Animals. Digital image. Techgage.com. N.p., n.d. Web. <http://techgage.com/wp-content/uploads/2016/07/Minecraft.jpg>.
